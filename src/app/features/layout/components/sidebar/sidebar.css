@@ -1,0 +1,33 @@
+@reference '../../../../../styles.css';
+
+:host {
+  @apply block;
+}
+
+.menu {
+  @apply sticky top-0 flex h-dvh flex-col bg-black p-4 text-cinza-200;
+}
+
+.marca {
+  @apply mb-8 flex items-center gap-3 px-2;
+}
+
+.marca-logo {
+  @apply size-12 rounded-xl;
+}
+
+.marca-nome {
+  @apply font-display text-xl font-extrabold tracking-wide text-white uppercase;
+}
+
+.lista {
+  @apply flex flex-col gap-1;
+}
+
+.item {
+  @apply flex items-center gap-3 rounded-full px-4 py-2.5 font-medium transition-colors hover:bg-cinza-950;
+}
+
+.item.ativo {
+  @apply bg-laranja-500 text-white hover:bg-laranja-600;
+}

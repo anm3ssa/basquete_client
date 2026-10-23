@@ -1,0 +1,13 @@
+@reference '../../../../../styles.css';
+
+.topo {
+  @apply flex items-center justify-between gap-4 border-b border-cinza-200 bg-white px-4 py-3 lg:px-8;
+}
+
+.saudacao {
+  @apply text-cinza-700;
+}
+
+.nome {
+  @apply text-cinza-950;
+}

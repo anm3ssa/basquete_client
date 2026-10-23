@@ -1,0 +1,152 @@
+@reference '../../../../styles.css';
+
+/* ---------- Estrutura ---------- */
+.pagina {
+  @apply min-h-dvh bg-white p-4 lg:p-6;
+}
+
+.grade {
+  @apply mx-auto grid min-h-[calc(100dvh-2rem)] max-w-7xl gap-6 lg:min-h-[calc(100dvh-3rem)] lg:grid-cols-2;
+}
+
+.coluna-form {
+  @apply flex flex-col items-center px-4 py-8 sm:px-8;
+}
+
+.conteudo {
+  @apply flex w-full max-w-sm flex-1 flex-col justify-center;
+}
+
+/* ---------- Cabeçalho ---------- */
+.logo-mobile {
+  @apply mx-auto mb-6 size-28 rounded-3xl bg-black lg:hidden;
+}
+
+.cabecalho {
+  @apply mb-10 text-center;
+}
+
+.titulo {
+  @apply font-display text-4xl font-extrabold tracking-tight text-cinza-950 sm:text-5xl;
+}
+
+.subtitulo {
+  @apply mt-3 text-base text-cinza-700;
+}
+
+/* ---------- Formulário ---------- */
+.formulario {
+  @apply flex flex-col gap-4;
+}
+
+.grupo {
+  @apply flex flex-col gap-1;
+}
+
+
+.campo,
+.campo-senha ::ng-deep input {
+  @apply w-full rounded-full border border-cinza-300 bg-white px-5 py-3 text-cinza-950;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.campo::placeholder,
+.campo-senha ::ng-deep input::placeholder {
+  @apply text-cinza-500;
+}
+
+.campo:enabled:hover,
+.campo-senha ::ng-deep input:enabled:hover {
+  @apply border-laranja-400;
+}
+
+.campo:enabled:focus,
+.campo-senha ::ng-deep input:enabled:focus {
+  @apply border-laranja-500 outline-none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-laranja-500) 20%, transparent);
+}
+
+.campo.invalido,
+.campo-senha.invalido ::ng-deep input {
+  @apply border-red-500;
+}
+
+.erro-campo {
+  @apply px-5 text-sm text-red-600;
+}
+
+/* ---------- Botão ---------- */
+.acoes {
+  @apply mt-4 flex justify-center;
+}
+
+.botao-entrar ::ng-deep .p-button {
+  @apply min-w-40 rounded-full border-laranja-500 bg-laranja-500 px-8 py-3 font-bold text-white;
+}
+
+.botao-entrar ::ng-deep .p-button:not(:disabled):hover {
+  @apply border-laranja-600 bg-laranja-600;
+}
+
+.botao-entrar ::ng-deep .p-button:not(:disabled):active {
+  @apply border-laranja-700 bg-laranja-700;
+}
+
+.botao-entrar ::ng-deep .p-button:focus-visible {
+  @apply outline-2 outline-offset-2 outline-laranja-400;
+}
+
+/* ---------- Rodapé ---------- */
+.rodape {
+  @apply pt-8 text-center text-cinza-800;
+}
+
+.link-cadastro {
+  @apply font-bold text-laranja-600 underline underline-offset-4 hover:text-laranja-700;
+}
+
+/* ---------- Painel da marca ---------- */
+.painel-marca {
+  @apply relative hidden overflow-hidden rounded-[2.5rem] bg-black lg:flex lg:flex-col lg:items-center lg:justify-center;
+}
+
+/* Brilho laranja atrás da logo */
+.painel-marca::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      color-mix(in srgb, var(--color-laranja-500) 35%, transparent) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 50% 110%,
+      color-mix(in srgb, var(--color-laranja-800) 60%, transparent) 0%,
+      transparent 60%
+    );
+}
+
+/* Linhas de quadra discretas */
+/* .painel-marca::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 2px solid color-mix(in srgb, var(--color-laranja-500) 18%, transparent);
+  border-radius: 9999px;
+} */
+
+.logo-painel {
+  @apply relative z-10 w-3/5 max-w-sm;
+}
+
+.nome-painel {
+  @apply relative z-10 mt-6 font-display text-lg font-semibold tracking-[0.3em] text-cinza-300 uppercase;
+}

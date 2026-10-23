@@ -1,0 +1,75 @@
+<main class="pagina">
+  <div class="grade">
+    <!-- Coluna do formulário -->
+    <section class="coluna-form">
+      <div class="conteudo">
+        <!-- Logo compacta no mobile (o painel lateral some em telas pequenas) -->
+        <img src="logo-basquete-assis.jpg" alt="Basquete Assis" class="logo-mobile" />
+
+        <header class="cabecalho">
+          <h1 class="titulo">Bem-vindo de volta!</h1>
+          <p class="subtitulo">Bora pra quadra!</p>
+        </header>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="formulario" novalidate>
+          @if (errorMessage(); as mensagem) {
+            <p-message severity="error" size="small">{{ mensagem }}</p-message>
+          }
+
+          <div class="grupo">
+            <label for="email" class="sr-only">E-mail</label>
+            <input
+              pInputText
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="e-mail"
+              autocomplete="username"
+              class="campo"
+              [class.invalido]="invalido('email')"
+              [invalid]="invalido('email')"
+              [attr.aria-invalid]="invalido('email')"
+            />
+            @if (invalido('email')) {
+              <small class="erro-campo">Informe um e-mail válido.</small>
+            }
+          </div>
+
+          <div class="grupo">
+            <label for="password" class="sr-only">Senha</label>
+            <p-password
+              inputId="password"
+              formControlName="password"
+              placeholder="senha"
+              autocomplete="current-password"
+              class="campo-senha"
+              [class.invalido]="invalido('password')"
+              [feedback]="false"
+              [toggleMask]="true"
+              [fluid]="true"
+              [invalid]="invalido('password')"
+            />
+            @if (invalido('password')) {
+              <small class="erro-campo">Senha incorreta.</small>
+            }
+          </div>
+
+          <div class="acoes">
+            <p-button type="submit" label="Entrar" class="botao-entrar" [loading]="isLoading()" />
+          </div>
+        </form>
+      </div>
+
+      <p class="rodape">
+        Não tem login? Faça
+        <a routerLink="/cadastro" class="link-cadastro">aqui</a>
+      </p>
+    </section>
+
+    <!-- Painel da marca -->
+    <aside class="painel-marca" aria-hidden="true">
+      <img src="logo-basquete-assis.jpg" alt="" class="logo-painel" />
+      <p class="nome-painel">Basquete Assis</p>
+    </aside>
+  </div>
+</main>

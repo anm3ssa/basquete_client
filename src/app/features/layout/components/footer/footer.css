@@ -1,0 +1,5 @@
+@reference '../../../../../styles.css';
+
+.rodape {
+  @apply px-4 py-4 text-center text-sm text-cinza-600 lg:px-8;
+}

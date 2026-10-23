@@ -1,0 +1,17 @@
+<nav class="menu" aria-label="Menu principal">
+  <a routerLink="/dashboard" class="marca">
+    <img src="logo-basquete-assis.jpg" alt="" class="marca-logo" />
+    <span class="marca-nome">Basquete Assis</span>
+  </a>
+
+  <ul class="lista">
+    @for (item of itens; track item.rota) {
+      <li>
+        <a [routerLink]="item.rota" routerLinkActive="ativo" ariaCurrentWhenActive="page" class="item">
+          <i [class]="item.icone" aria-hidden="true"></i>
+          {{ item.rotulo }}
+        </a>
+      </li>
+    }
+  </ul>
+</nav>
