@@ -1,0 +1,32 @@
+@let j = jogo();
+<header class="placar">
+  <div class="placar-topo">
+    <h1 class="titulo">Registro do jogo</h1>
+    <span class="mando">{{ mando() }}</span>
+  </div>
+
+  <div class="placar-times">
+    <div class="time">
+      <span class="time-nome">Basquete Assis</span>
+      <span class="time-pontos" data-testid="placar-time">{{ pontosTime() }}</span>
+    </div>
+    <span class="placar-x" aria-hidden="true">x</span>
+    <div class="time adversario">
+      <span class="time-nome">{{ j.adversario }}</span>
+      <span class="time-pontos" data-testid="placar-adversario">{{ pontosAdversario() }}</span>
+      <div class="botoes-adversario" role="group" [attr.aria-label]="'Pontos de ' + j.adversario">
+        <button type="button" class="btn-adv" (click)="alterarAdversario.emit(1)" [attr.aria-label]="'Mais 1 ponto para ' + j.adversario">+1</button>
+        <button type="button" class="btn-adv" (click)="alterarAdversario.emit(2)" [attr.aria-label]="'Mais 2 pontos para ' + j.adversario">+2</button>
+        <button type="button" class="btn-adv" (click)="alterarAdversario.emit(3)" [attr.aria-label]="'Mais 3 pontos para ' + j.adversario">+3</button>
+        <button type="button" class="btn-adv corrigir" (click)="alterarAdversario.emit(-1)" [disabled]="pontosAdversario() === 0" aria-label="Corrigir: menos 1 ponto do adversário">
+          <i class="pi pi-minus" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <p class="quando">
+    <span><i class="pi pi-calendar" aria-hidden="true"></i> {{ j.inicio | date: "EEEE, dd/MM/yyyy 'às' HH:mm" }}</span>
+    <span><i class="pi pi-map-marker" aria-hidden="true"></i> {{ j.local }}</span>
+  </p>
+</header>

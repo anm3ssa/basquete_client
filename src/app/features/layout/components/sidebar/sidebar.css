@@ -1,11 +1,11 @@
 @reference '../../../../../styles.css';
 
 :host {
-  @apply block;
+  @apply block h-full;
 }
 
 .menu {
-  @apply sticky top-0 flex h-dvh flex-col bg-black p-4 text-cinza-200;
+  @apply flex h-full min-h-dvh flex-col bg-black p-4 text-cinza-200;
 }
 
 .marca {
@@ -26,6 +26,10 @@
 
 .item {
   @apply flex items-center gap-3 rounded-full px-4 py-2.5 font-medium transition-colors hover:bg-cinza-950;
+}
+
+.item:focus-visible {
+  @apply outline-2 outline-offset-2 outline-laranja-400;
 }
 
 .item.ativo {

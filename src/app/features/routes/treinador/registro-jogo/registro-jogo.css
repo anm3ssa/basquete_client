@@ -1,0 +1,163 @@
+@reference '../../../../../styles.css';
+
+.pagina {
+  @apply flex flex-col gap-5 pb-4;
+}
+
+.voltar,
+.link {
+  @apply inline-flex items-center gap-2 self-start text-sm font-semibold text-laranja-600 hover:text-laranja-700;
+}
+
+/* ---------- Período ---------- */
+.atleta:focus-visible {
+  outline: 2px solid var(--color-laranja-500);
+  outline-offset: 2px;
+}
+
+.periodo {
+  @apply flex flex-wrap items-center gap-3;
+}
+
+.rotulo {
+  @apply text-sm font-semibold text-cinza-700;
+}
+
+/* ---------- Cartões ---------- */
+.grade {
+  @apply grid items-start gap-5 lg:grid-cols-2;
+}
+
+.cartao {
+  @apply flex flex-col gap-4 rounded-3xl border border-cinza-200 bg-white p-5;
+}
+
+.cartao-topo {
+  @apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.cartao-titulo {
+  @apply flex items-center gap-2 font-display text-xl font-extrabold text-cinza-950;
+}
+
+.passo {
+  @apply flex size-7 items-center justify-center rounded-full bg-laranja-500 font-sans text-sm text-white;
+}
+
+.contador {
+  @apply rounded-full bg-cinza-100 px-2.5 py-0.5 font-sans text-sm text-cinza-700;
+}
+
+/* ---------- Atletas ---------- */
+.atletas {
+  @apply grid gap-2 sm:grid-cols-2;
+}
+
+.atleta {
+  @apply flex cursor-pointer items-center gap-3 rounded-2xl border border-cinza-200 bg-white p-2.5 text-left hover:border-laranja-300;
+}
+
+.atleta.ativo {
+  @apply border-laranja-500 bg-laranja-50;
+  box-shadow: 0 0 0 1px var(--color-laranja-500);
+}
+
+.atleta-numero {
+  @apply flex size-10 shrink-0 items-center justify-center rounded-xl bg-cinza-950 font-display text-lg font-extrabold text-white;
+}
+
+.atleta.ativo .atleta-numero {
+  @apply bg-laranja-500;
+}
+
+.atleta-info {
+  @apply flex min-w-0 flex-col;
+}
+
+.atleta-nome {
+  @apply truncate font-semibold text-cinza-950;
+}
+
+.atleta-resumo {
+  @apply text-xs text-cinza-600;
+}
+
+/* ---------- Lances ---------- */
+.dica {
+  @apply rounded-xl bg-cinza-100 px-3 py-2 text-sm text-cinza-700;
+}
+
+.dica.ativa {
+  @apply bg-laranja-50 text-laranja-800;
+}
+
+.arremessos {
+  @apply flex flex-col gap-2;
+}
+
+.arremesso {
+  @apply grid grid-cols-[6rem_1fr_1fr] items-center gap-2;
+}
+
+.arremesso-titulo {
+  @apply text-sm font-semibold text-cinza-800;
+}
+
+.outros {
+  @apply grid grid-cols-2 gap-2;
+}
+
+/* ---------- Histórico ---------- */
+.historico {
+  @apply flex max-h-96 flex-col gap-1 overflow-y-auto;
+}
+
+.lance {
+  @apply flex items-center gap-3 rounded-xl border-l-4 border-cinza-300 bg-cinza-50 py-1 pr-1 pl-3 text-sm;
+}
+
+.lance.convertido {
+  @apply border-green-500;
+}
+
+.lance.errado {
+  @apply border-red-400;
+}
+
+.lance-periodo {
+  @apply w-14 shrink-0 text-xs font-semibold text-cinza-500;
+}
+
+.lance-atleta {
+  @apply min-w-0 flex-1 truncate font-semibold text-cinza-950;
+}
+
+.lance-descricao {
+  @apply hidden text-cinza-700 sm:inline;
+}
+
+.lance-pontos {
+  @apply rounded-full bg-laranja-100 px-2 py-0.5 text-xs font-bold text-laranja-700;
+}
+
+.nada {
+  @apply py-4 text-center text-sm text-cinza-600;
+}
+
+.vazio {
+  @apply flex flex-col items-center gap-3 rounded-3xl border border-dashed border-cinza-300 p-10 text-center text-cinza-700;
+}
+
+.vazio .pi {
+  @apply text-3xl text-cinza-400;
+}
+
+/* ---------- Rodapé fixo ---------- */
+.rodape {
+  @apply sticky bottom-0 z-10 flex flex-col gap-3 rounded-2xl border border-cinza-200 bg-white p-3 sm:flex-row sm:items-center sm:justify-between;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.08);
+}
+
+.rodape-botoes {
+  @apply flex justify-end gap-2;
+}

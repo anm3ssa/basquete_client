@@ -1,0 +1,159 @@
+<section class="pagina">
+  <header>
+    <h1 class="titulo">Configurações</h1>
+    <p class="subtitulo">Seus dados, sua foto e sua conta.</p>
+  </header>
+
+  @if (carregando()) {
+    <div class="grade">
+      <p-skeleton height="20rem" borderRadius="1.5rem" />
+      <p-skeleton height="24rem" borderRadius="1.5rem" />
+    </div>
+  } @else if (erroAoCarregar()) {
+    <div class="vazio">
+      <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+      <p>Não foi possível carregar seus dados. Tente novamente mais tarde.</p>
+    </div>
+ } @else if (conta(); as c) {
+    <div class="grade">
+      <!-- Coluna da Esquerda: Perfil + Exclusão -->
+      <div class="coluna-lateral">
+        <!-- Foto e identificação -->
+        <article class="cartao perfil">
+          <div class="foto">
+            @if (c.fotoUrl) {
+              <p-avatar [image]="c.fotoUrl" shape="circle" styleClass="avatar-grande" ariaLabel="Sua foto de perfil" />
+            } @else {
+              <p-avatar [label]="iniciais()" shape="circle" styleClass="avatar-grande avatar-iniciais" />
+            }
+          </div>
+          <h2 class="nome">{{ c.nome }}</h2>
+          <p-tag [value]="rotuloPerfil()" [severity]="c.perfil === 'ROLE_TREINADOR' ? 'warn' : 'secondary'" [rounded]="true" />
+
+          <input
+            #arquivo
+            type="file"
+            [accept]="tiposAceitos"
+            class="sr-only"
+            tabindex="-1"
+            aria-hidden="true"
+            (change)="aoEscolherFoto($event)"
+          />
+          <div class="acoes-foto">
+            <p-button
+              [label]="c.fotoUrl ? 'Trocar foto' : 'Adicionar foto'"
+              icon="pi pi-camera"
+              [loading]="enviandoFoto()"
+              [fluid]="true"
+              (onClick)="escolherFoto()"
+            />
+            @if (c.fotoUrl) {
+              <p-button
+                label="Remover foto"
+                icon="pi pi-trash"
+                severity="secondary"
+                [text]="true"
+                [disabled]="enviandoFoto()"
+                [fluid]="true"
+                (onClick)="removerFoto()"
+              />
+            }
+          </div>
+          <p class="dica">JPG, PNG ou WEBP, até 5 MB.</p>
+          @if (erroFoto(); as mensagem) {
+            <p-message severity="error" size="small">{{ mensagem }}</p-message>
+          }
+        </article>
+
+        <!-- Excluir conta -->
+        <article class="cartao perigo">
+          <div>
+            <h2 class="cartao-titulo">Excluir conta</h2>
+          </div>
+          <p-button
+            label="Excluir minha conta"
+            icon="pi pi-trash"
+            severity="danger"
+            [outlined]="true"
+            [fluid]="true"
+            (onClick)="abrirExclusao()"
+          />
+        </article>
+      </div>
+
+      <!-- Dados pessoais -->
+      <article class="cartao">
+        <h2 class="cartao-titulo">Dados pessoais</h2>
+
+        <form [formGroup]="form" (ngSubmit)="salvar()" class="formulario" novalidate>
+          @if (erroAoSalvar(); as mensagem) {
+            <p-message severity="error" size="small">{{ mensagem }}</p-message>
+          }
+
+          <div class="campo">
+            <label for="nome">Nome completo</label>
+            <input pInputText id="nome" formControlName="nome" autocomplete="name" [invalid]="invalido('nome')" class="largo" />
+            @if (invalido('nome')) {
+              <small class="erro">Informe seu nome (mínimo de 3 letras).</small>
+            }
+          </div>
+
+          <div class="campo">
+            <label for="email">E-mail</label>
+            <input pInputText id="email" type="email" formControlName="email" autocomplete="email" [invalid]="invalido('email')" class="largo" />
+            @if (invalido('email')) {
+              <small class="erro">Informe um e-mail válido.</small>
+            }
+          </div>
+
+          <div class="linha">
+            <div class="campo">
+              <label for="telefone">Telefone</label>
+              <input
+                pInputText
+                id="telefone"
+                type="tel"
+                inputmode="numeric"
+                formControlName="telefone"
+                mask="(00) 0000-0000||(00) 00000-0000"
+                autocomplete="tel-national"
+                [invalid]="invalido('telefone')"
+                class="largo"
+              />
+              @if (invalido('telefone')) {
+                <small class="erro">Telefone com DDD.</small>
+              }
+            </div>
+            <div class="campo">
+              <label for="dataNascimento">Data de nascimento</label>
+              <input
+                pInputText
+                id="dataNascimento"
+                inputmode="numeric"
+                formControlName="dataNascimento"
+                mask="00/00/0000"
+                placeholder="dd/mm/aaaa"
+                autocomplete="bday"
+                [invalid]="invalido('dataNascimento')"
+                class="largo"
+              />
+              @if (invalido('dataNascimento')) {
+                <small class="erro">Data inválida.</small>
+              }
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="cpf">CPF</label>
+            <input pInputText id="cpf" [value]="c.cpf ? (c.cpf | mask: '000.000.000-00') : '—'" disabled class="largo" />
+            <small class="dica">Para alterar o CPF, fale com a comissão técnica.</small>
+          </div>
+
+          <div class="acoes">
+            <p-button label="Descartar" severity="secondary" [text]="true" [disabled]="form.pristine || salvando()" (onClick)="descartar()" />
+            <p-button type="submit" label="Salvar alterações" icon="pi pi-check" [loading]="salvando()" [disabled]="form.pristine" />
+          </div>
+        </form>
+      </article>
+    </div>
+  }

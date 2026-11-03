@@ -1,0 +1,124 @@
+<p-dialog
+  [(visible)]="visivel"
+  [modal]="true"
+  [draggable]="false"
+  [header]="editando() ? 'Editar evento' : tipo() === 'JOGO' ? 'Novo jogo' : 'Novo treino'"
+  [style]="{ width: '40rem' }"
+  [breakpoints]="{ '720px': '95vw' }"
+>
+  <form [formGroup]="form" (ngSubmit)="salvar()" id="form-evento" class="formulario" novalidate>
+    @if (erro(); as mensagem) {
+      <p-message severity="error" size="small">{{ mensagem }}</p-message>
+    }
+
+    <p-selectbutton
+      formControlName="tipo"
+      [options]="tipos"
+      optionLabel="rotulo"
+      optionValue="valor"
+      [allowEmpty]="false"
+      ariaLabelledBy="rotulo-tipo"
+    />
+    <span id="rotulo-tipo" class="sr-only">Tipo de evento</span>
+
+    <div class="linha tres">
+      <div class="campo">
+        <label for="data">Data</label>
+        <p-datepicker
+          inputId="data"
+          formControlName="data"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+          [fluid]="true"
+          [invalid]="invalido('data')"
+          appendTo="body"
+        />
+      </div>
+      <div class="campo">
+        <label for="horaInicio">Início</label>
+        <p-datepicker inputId="horaInicio" formControlName="horaInicio" [timeOnly]="true" [fluid]="true" appendTo="body" />
+      </div>
+      <div class="campo">
+        <label for="horaFim">Término</label>
+        <p-datepicker
+          inputId="horaFim"
+          formControlName="horaFim"
+          [timeOnly]="true"
+          [fluid]="true"
+          [invalid]="form.hasError('horario')"
+          appendTo="body"
+        />
+      </div>
+    </div>
+    @if (form.hasError('horario')) {
+      <small class="erro">O término precisa ser depois do início.</small>
+    }
+
+    <div class="campo">
+      <label for="local">Local</label>
+      <input pInputText id="local" formControlName="local" [invalid]="invalido('local')" class="largo" />
+      @if (invalido('local')) {
+        <small class="erro">Informe o local.</small>
+      }
+    </div>
+
+    @if (tipo() === 'JOGO') {
+      <div class="linha">
+        <div class="campo">
+          <label for="adversario">Adversário</label>
+          <input pInputText id="adversario" formControlName="adversario" [invalid]="invalido('adversario')" class="largo" />
+          @if (invalido('adversario')) {
+            <small class="erro">Informe o adversário.</small>
+          }
+        </div>
+        <div class="campo">
+          <span class="rotulo" id="rotulo-mando">Mando</span>
+          <p-selectbutton
+            formControlName="mandante"
+            [options]="mandos"
+            optionLabel="rotulo"
+            optionValue="valor"
+            [allowEmpty]="false"
+            ariaLabelledBy="rotulo-mando"
+          />
+        </div>
+      </div>
+
+      @if (jogoRealizado()) {
+        <div class="linha">
+          <div class="campo">
+            <label for="placarTime">Placar Basquete Assis</label>
+            <p-inputnumber inputId="placarTime" formControlName="placarTime" [min]="0" [max]="250" [fluid]="true" />
+          </div>
+          <div class="campo">
+            <label for="placarAdversario">Placar adversário</label>
+            <p-inputnumber inputId="placarAdversario" formControlName="placarAdversario" [min]="0" [max]="250" [fluid]="true" />
+          </div>
+        </div>
+      }
+    } @else {
+      <div class="campo">
+        <label for="foco">Foco do treino</label>
+        <input pInputText id="foco" formControlName="foco" placeholder="Ex.: defesa por zona" class="largo" />
+      </div>
+    }
+
+    <div class="campo">
+      <label for="anotacoes">Anotações técnicas</label>
+      <textarea
+        pTextarea
+        id="anotacoes"
+        formControlName="anotacoes"
+        rows="4"
+        [autoResize]="true"
+        placeholder="Visível para os atletas convocados"
+        class="largo"
+      ></textarea>
+    </div>
+  </form>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" [text]="true" (onClick)="visivel.set(false)" />
+    <p-button label="Salvar" icon="pi pi-check" [loading]="salvando()" (onClick)="salvar()" />
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,75 @@
+<p-dialog
+  [(visible)]="visivel"
+  [modal]="true"
+  [draggable]="false"
+  [dismissableMask]="true"
+  [header]="evento()?.tipo === 'JOGO' ? 'Presença no jogo' : 'Presença no treino'"
+  [style]="{ width: '32rem' }"
+  [breakpoints]="{ '640px': '95vw' }"
+>
+  @if (evento(); as e) {
+    <div class="resumo">
+      <p class="quando">{{ e.inicio | date: "EEEE, dd 'de' MMMM 'às' HH:mm" }}</p>
+      <p class="onde"><i class="pi pi-map-marker" aria-hidden="true"></i> {{ e.local }}</p>
+      @if (e.tipo === 'JOGO') {
+        <p class="onde"><i class="pi pi-flag" aria-hidden="true"></i> {{ e.adversario }} ({{ e.mandante ? 'em casa' : 'fora' }})</p>
+      }
+      @if (e.anotacoes) {
+        <div class="anotacoes">
+          <span class="anotacoes-titulo">Recado do treinador</span>
+          <p>{{ e.anotacoes }}</p>
+        </div>
+      }
+    </div>
+
+    @if (erro(); as mensagem) {
+      <div class="alerta"><p-message severity="error" size="small">{{ mensagem }}</p-message></div>
+    }
+
+    @if (modo() === 'escolher') {
+      <div class="opcoes">
+        <p-button
+          label="Confirmar presença"
+          icon="pi pi-check"
+          [loading]="enviando()"
+          [fluid]="true"
+          (onClick)="confirmar()"
+        />
+        <p-button
+          label="Não vou conseguir ir"
+          icon="pi pi-times"
+          severity="secondary"
+          [outlined]="true"
+          [disabled]="enviando()"
+          [fluid]="true"
+          (onClick)="modo.set('ausencia')"
+        />
+      </div>
+    } @else {
+      <div class="ausencia">
+        <label for="justificativa" class="rotulo">Justificativa</label>
+        <textarea
+          pTextarea
+          id="justificativa"
+          rows="4"
+          [autoResize]="true"
+          [formControl]="justificativa"
+          [invalid]="justificativa.invalid && justificativa.touched"
+          placeholder="Ex.: prova na faculdade no mesmo horário"
+          class="campo-texto"
+        ></textarea>
+        @if (justificativa.invalid && justificativa.touched) {
+          <small class="erro">Escreva o motivo (mínimo de 5 caracteres).</small>
+        }
+      </div>
+    }
+  }
+
+  <!-- O template precisa existir sempre: o p-dialog não enxerga templates dentro de @if -->
+  <ng-template #footer>
+    @if (modo() === 'ausencia') {
+      <p-button label="Voltar" severity="secondary" [text]="true" (onClick)="modo.set('escolher')" />
+      <p-button label="Enviar justificativa" icon="pi pi-send" [loading]="enviando()" (onClick)="justificar()" />
+    }
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,73 @@
+<p-dialog
+  [(visible)]="visivel"
+  [modal]="true"
+  [draggable]="false"
+  header="Convocação"
+  [style]="{ width: '40rem' }"
+  [breakpoints]="{ '720px': '95vw' }"
+>
+  @if (evento(); as e) {
+    <div class="resumo">
+      <p class="evento">{{ titulo() }}</p>
+      <p class="quando">{{ e.inicio | date: "EEEE, dd/MM 'às' HH:mm" }} · {{ e.local }}</p>
+    </div>
+
+    @if (erro(); as mensagem) {
+      <div class="alerta"><p-message severity="error" size="small">{{ mensagem }}</p-message></div>
+    }
+
+    @if (!ficha()) {
+      <label for="atletas" class="rotulo">Atletas convocados</label>
+      <p-multiselect
+        inputId="atletas"
+        [options]="opcoes()"
+        [ngModel]="selecionados()"
+        (ngModelChange)="selecionados.set($event)"
+        optionLabel="rotulo"
+        optionValue="id"
+        display="chip"
+        [filter]="true"
+        filterPlaceHolder="Buscar atleta"
+        placeholder="Escolha os atletas"
+        [loading]="carregando()"
+        [fluid]="true"
+        appendTo="body"
+      />
+      <p class="dica">{{ selecionados().length }} de {{ opcoes().length }} atletas ativos selecionados.</p>
+    } @else {
+      <p-message severity="success" size="small">Ficha gerada. Os atletas já podem confirmar presença.</p-message>
+      <p-table [value]="ficha()!.atletas" size="small" styleClass="ficha" [tableStyle]="{ 'min-width': '22rem' }">
+        <ng-template #header>
+          <tr>
+            <th scope="col">Nº</th>
+            <th scope="col">Atleta</th>
+            <th scope="col">Situação</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-a>
+          <tr>
+            <td class="numero">{{ a.numero }}</td>
+            <td>{{ a.atletaNome }}</td>
+            <td><p-tag value="Aguardando" severity="warn" /></td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  }
+
+  <ng-template #footer>
+    @if (!ficha()) {
+      <p-button label="Cancelar" severity="secondary" [text]="true" (onClick)="visivel.set(false)" />
+      <p-button
+        label="Gerar ficha"
+        icon="pi pi-file"
+        [loading]="gerando()"
+        [disabled]="!selecionados().length"
+        (onClick)="gerarFicha()"
+      />
+    } @else {
+      <p-button label="Fechar" severity="secondary" [text]="true" (onClick)="visivel.set(false)" />
+      <p-button label="Imprimir ficha" icon="pi pi-print" (onClick)="imprimir()" />
+    }
+  </ng-template>
+</p-dialog>

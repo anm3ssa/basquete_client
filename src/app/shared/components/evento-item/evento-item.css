@@ -1,0 +1,57 @@
+@reference '../../../../styles.css';
+
+:host {
+  @apply block;
+}
+
+.item {
+  @apply flex flex-col gap-4 rounded-2xl border border-cinza-200 bg-white p-4 sm:flex-row sm:items-center;
+}
+
+.item.jogo {
+  @apply border-l-4 border-l-laranja-500;
+}
+
+.data {
+  @apply flex size-14 shrink-0 flex-col items-center justify-center rounded-xl bg-cinza-950 text-white;
+}
+
+.data .dia {
+  @apply font-display text-2xl leading-none font-extrabold;
+}
+
+.data .mes {
+  @apply text-xs uppercase;
+}
+
+.info {
+  @apply flex min-w-0 flex-1 flex-col gap-1.5;
+}
+
+.linha-titulo {
+  @apply flex flex-wrap items-center gap-2;
+}
+
+.titulo {
+  @apply font-semibold text-cinza-950;
+}
+
+.mando {
+  @apply rounded-full bg-cinza-100 px-2 py-0.5 text-xs font-medium text-cinza-700;
+}
+
+.detalhes {
+  @apply flex flex-col gap-1 text-sm text-cinza-700 sm:flex-row sm:gap-4;
+}
+
+.detalhes span::first-letter {
+  @apply uppercase;
+}
+
+:host ::ng-deep .presenca {
+  @apply self-start;
+}
+
+.acoes {
+  @apply flex shrink-0 flex-wrap gap-2 empty:hidden;
+}

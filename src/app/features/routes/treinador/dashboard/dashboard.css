@@ -1,0 +1,127 @@
+@reference '../../../../../styles.css';
+
+.pagina {
+  @apply flex flex-col gap-6;
+}
+
+.titulo {
+  @apply font-display text-3xl font-extrabold text-cinza-950 sm:text-4xl;
+}
+
+.subtitulo {
+  @apply mt-1 text-cinza-700;
+}
+
+.indicadores {
+  @apply grid gap-3 sm:grid-cols-3;
+}
+
+.grade {
+  @apply grid items-start gap-6 xl:grid-cols-2;
+}
+
+.cartao {
+  @apply flex flex-col gap-4 rounded-3xl border border-cinza-200 bg-white p-5;
+}
+
+.cartao-topo {
+  @apply flex items-center justify-between gap-2;
+}
+
+.cartao-titulo {
+  @apply font-display text-2xl font-extrabold text-cinza-950;
+}
+
+.link {
+  @apply flex items-center gap-1.5 text-sm font-semibold text-laranja-700 hover:underline;
+}
+
+/* ---------- Confirmação ---------- */
+.confirmacao {
+  @apply flex flex-col gap-2 rounded-2xl bg-cinza-50 p-4;
+}
+
+.confirmacao-topo {
+  @apply flex items-center justify-between text-sm text-cinza-800;
+}
+
+.confirmacao-topo strong {
+  @apply font-display text-2xl text-cinza-950;
+}
+
+:host ::ng-deep .barra {
+  @apply h-2.5 rounded-full;
+}
+
+.legenda {
+  @apply flex flex-wrap gap-x-4 gap-y-1 text-sm text-cinza-700;
+}
+
+.legenda li {
+  @apply flex items-center gap-1.5;
+}
+
+.bolinha {
+  @apply inline-block size-2.5 rounded-full;
+}
+
+.bolinha.confirmado {
+  @apply bg-laranja-500;
+}
+
+.bolinha.ausente {
+  @apply bg-red-500;
+}
+
+.bolinha.pendente {
+  @apply bg-cinza-400;
+}
+
+.subtitulo-lista {
+  @apply text-sm font-bold tracking-wide text-cinza-700 uppercase;
+}
+
+.pessoas {
+  @apply flex flex-col divide-y divide-cinza-100;
+}
+
+.pessoa {
+  @apply flex items-center gap-3 py-2.5;
+}
+
+.pessoa-numero {
+  @apply w-10 shrink-0 font-display text-lg font-extrabold text-cinza-500;
+}
+
+.pessoa-info {
+  @apply flex min-w-0 flex-1 flex-col;
+}
+
+.pessoa-nome {
+  @apply font-medium text-cinza-950;
+}
+
+.pessoa-motivo {
+  @apply truncate text-sm text-cinza-600 italic;
+}
+
+/* ---------- Agenda ---------- */
+.agenda {
+  @apply flex flex-col gap-3;
+}
+
+.contagem {
+  @apply flex items-center gap-1 rounded-full bg-cinza-100 px-3 py-1 text-sm font-semibold text-cinza-800;
+}
+
+.nada {
+  @apply text-cinza-600;
+}
+
+.vazio {
+  @apply flex flex-col items-center gap-2 rounded-3xl border border-dashed border-cinza-300 bg-white p-8 text-center text-cinza-700;
+}
+
+.vazio .pi {
+  @apply text-3xl text-cinza-400;
+}

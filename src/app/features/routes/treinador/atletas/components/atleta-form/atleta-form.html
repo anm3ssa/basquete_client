@@ -1,0 +1,116 @@
+<p-dialog
+  [(visible)]="visivel"
+  [modal]="true"
+  [draggable]="false"
+  [header]="editando() ? 'Editar atleta' : 'Novo atleta'"
+  [style]="{ width: '40rem' }"
+  [breakpoints]="{ '720px': '95vw' }"
+>
+  <form [formGroup]="form" (ngSubmit)="salvar()" class="formulario" novalidate>
+    @if (erro(); as mensagem) {
+      <p-message severity="error" size="small">{{ mensagem }}</p-message>
+    }
+
+    <div class="campo">
+      <label for="nome">Nome completo</label>
+      <input pInputText id="nome" formControlName="nome" [invalid]="invalido('nome')" class="largo" />
+      @if (invalido('nome')) {
+        <small class="erro">Informe o nome (mínimo de 3 letras).</small>
+      }
+    </div>
+
+    <div class="linha">
+      <div class="campo">
+        <label for="numero">Número da camisa</label>
+        <p-inputnumber inputId="numero" formControlName="numero" [min]="0" [max]="99" [useGrouping]="false" [invalid]="invalido('numero')" [fluid]="true" />
+        @if (form.controls.numero.hasError('numeroEmUso')) {
+          <small class="erro">Número já usado por outro atleta.</small>
+        } @else if (invalido('numero')) {
+          <small class="erro">Informe um número de 0 a 99.</small>
+        }
+      </div>
+      <div class="campo">
+        <label for="posicao">Posição</label>
+        <p-select
+          inputId="posicao"
+          formControlName="posicao"
+          [options]="posicoes"
+          optionLabel="rotulo"
+          optionValue="valor"
+          placeholder="Escolha"
+          [invalid]="invalido('posicao')"
+          [fluid]="true"
+          appendTo="body"
+        />
+        @if (invalido('posicao')) {
+          <small class="erro">Escolha a posição.</small>
+        }
+      </div>
+    </div>
+
+    <div class="linha">
+      <div class="campo">
+        <label for="cpf">CPF</label>
+        <input pInputText id="cpf" inputmode="numeric" formControlName="cpf" mask="000.000.000-00" [invalid]="invalido('cpf')" class="largo" />
+        @if (invalido('cpf')) {
+          <small class="erro">CPF inválido.</small>
+        }
+      </div>
+      <div class="campo">
+        <label for="dataNascimento">Data de nascimento</label>
+        <p-datepicker
+          inputId="dataNascimento"
+          formControlName="dataNascimento"
+          dateFormat="dd/mm/yy"
+          [maxDate]="hoje"
+          [showIcon]="true"
+          [invalid]="invalido('dataNascimento')"
+          [fluid]="true"
+          appendTo="body"
+        />
+        @if (invalido('dataNascimento')) {
+          <small class="erro">Informe a data de nascimento.</small>
+        }
+      </div>
+    </div>
+
+    <div class="linha">
+      <div class="campo">
+        <label for="email">E-mail</label>
+        <input pInputText id="email" type="email" formControlName="email" [invalid]="invalido('email')" class="largo" />
+        @if (invalido('email')) {
+          <small class="erro">E-mail inválido.</small>
+        }
+      </div>
+      <div class="campo">
+        <label for="telefone">Telefone</label>
+        <input
+          pInputText
+          id="telefone"
+          type="tel"
+          inputmode="numeric"
+          formControlName="telefone"
+          mask="(00) 0000-0000||(00) 00000-0000"
+          [invalid]="invalido('telefone')"
+          class="largo"
+        />
+        @if (invalido('telefone')) {
+          <small class="erro">Telefone com DDD.</small>
+        }
+      </div>
+    </div>
+
+    <div class="campo">
+      <label for="fotoUrl">Foto (link, opcional)</label>
+      <input pInputText id="fotoUrl" type="url" formControlName="fotoUrl" placeholder="https://..." class="largo" />
+      @if (form.controls.fotoUrl.invalid) {
+        <small class="erro">Use um link começando com http:// ou https://</small>
+      }
+    </div>
+  </form>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" severity="secondary" [text]="true" (onClick)="visivel.set(false)" />
+    <p-button label="Salvar" icon="pi pi-check" [loading]="salvando()" (onClick)="salvar()" />
+  </ng-template>
+</p-dialog>

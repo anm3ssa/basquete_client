@@ -1,0 +1,131 @@
+<section class="pagina">
+  <header class="cabecalho">
+    <div>
+      <h1 class="titulo">Atletas</h1>
+      <p class="subtitulo">{{ totalAtivos() }} atletas ativos no elenco.</p>
+    </div>
+    <p-button label="Novo atleta" icon="pi pi-user-plus" (onClick)="novo()" />
+  </header>
+
+  <div class="cartao">
+    <p-table
+      #tabela
+      [value]="linhas()"
+      dataKey="id"
+      [loading]="carregando()"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [globalFilterFields]="['nome', 'email', 'posicaoRotulo', 'numero', 'telefone']"
+      sortField="numero"
+      [sortOrder]="1"
+      [rowHover]="true"
+      [tableStyle]="{ 'min-width': '56rem' }"
+      currentPageReportTemplate="{first}–{last} de {totalRecords}"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template #caption>
+        <div class="barra">
+          <p-iconfield iconPosition="left">
+            <p-inputicon styleClass="pi pi-search" />
+            <input
+              pInputText
+              type="search"
+              placeholder="Buscar por nome, posição, número..."
+              aria-label="Buscar atletas"
+              class="busca"
+              (input)="buscar(tabela, $event)"
+            />
+          </p-iconfield>
+          <p-selectbutton
+            [options]="filtros"
+            [ngModel]="filtroStatus()"
+            (ngModelChange)="filtroStatus.set($event)"
+            optionLabel="rotulo"
+            optionValue="valor"
+            [allowEmpty]="false"
+            ariaLabelledBy="rotulo-situacao"
+          />
+          <span id="rotulo-situacao" class="sr-only">Situação</span>
+        </div>
+      </ng-template>
+
+      <ng-template #header>
+        <tr>
+          <th pSortableColumn="numero" scope="col" class="col-numero">Nº <p-sortIcon field="numero" /></th>
+          <th pSortableColumn="nome" scope="col">Atleta <p-sortIcon field="nome" /></th>
+          <th pSortableColumn="posicaoRotulo" scope="col">Posição <p-sortIcon field="posicaoRotulo" /></th>
+          <th pSortableColumn="idade" scope="col">Idade <p-sortIcon field="idade" /></th>
+          <th scope="col">Telefone</th>
+          <th pSortableColumn="ativo" scope="col">Situação <p-sortIcon field="ativo" /></th>
+          <th scope="col" class="col-acoes"><span class="sr-only">Ações</span></th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-a>
+        <tr [class.inativo]="!a.ativo">
+          <td class="col-numero">{{ a.numero }}</td>
+          <td>
+            <div class="atleta">
+              @if (a.fotoUrl) {
+                <p-avatar [image]="a.fotoUrl" shape="circle" [ariaLabel]="a.nome" />
+              } @else {
+                <p-avatar [label]="iniciais(a.nome)" shape="circle" styleClass="avatar-iniciais" />
+              }
+              <div class="atleta-info">
+                <span class="atleta-nome">{{ a.nome }}</span>
+                <span class="atleta-email">{{ a.email }}</span>
+              </div>
+            </div>
+          </td>
+          <td>{{ a.posicaoRotulo }}</td>
+          <td>
+            {{ a.idade }} anos
+            <span class="nascimento">{{ a.dataNascimento | date: 'dd/MM/yyyy' }}</span>
+          </td>
+          <td class="telefone">{{ a.telefone | mask: mascaraTelefone }}</td>
+          <td>
+            <p-tag [value]="a.ativo ? 'Ativo' : 'Inativo'" [severity]="a.ativo ? 'success' : 'secondary'" />
+          </td>
+          <td class="col-acoes">
+            <p-button
+              icon="pi pi-pencil"
+              severity="secondary"
+              [text]="true"
+              [rounded]="true"
+              pTooltip="Editar"
+              tooltipPosition="top"
+              [ariaLabel]="'Editar ' + a.nome"
+              (onClick)="editar(a)"
+            />
+            <p-button
+              [icon]="a.ativo ? 'pi pi-user-minus' : 'pi pi-user-plus'"
+              [severity]="a.ativo ? 'danger' : 'success'"
+              [text]="true"
+              [rounded]="true"
+              [pTooltip]="a.ativo ? 'Inativar' : 'Reativar'"
+              tooltipPosition="top"
+              [ariaLabel]="(a.ativo ? 'Inativar ' : 'Reativar ') + a.nome"
+              (onClick)="alternarStatus(a)"
+            />
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="7" class="vazio">Nenhum atleta encontrado.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</section>
+
+<app-atleta-form
+  [atleta]="atletaEditado()"
+  [numerosEmUso]="numerosEmUso()"
+  [(visivel)]="formVisivel"
+  (salvo)="aoSalvar($event)"
+/>
+
+<p-confirmdialog />

@@ -1,0 +1,80 @@
+<section class="pagina">
+  <header>
+    <h1 class="titulo">{{ time()?.nome || 'Meu time' }}</h1>
+    <p class="subtitulo">Comissão técnica e elenco.</p>
+  </header>
+
+  @if (erro()) {
+    <div class="vazio">
+      <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+      <p>Não foi possível carregar o time. Tente novamente mais tarde.</p>
+    </div>
+  } @else {
+    <!-- Comissão técnica -->
+    <section class="secao" aria-labelledby="titulo-comissao">
+      <h2 id="titulo-comissao" class="secao-titulo">Comissão técnica</h2>
+      <div class="comissao">
+        @if (carregando()) {
+          @for (i of [1, 2]; track i) {
+            <p-skeleton height="9rem" borderRadius="1.5rem" />
+          }
+        } @else {
+          @for (t of time()?.comissaoTecnica ?? []; track t.id) {
+            <article class="treinador">
+              <div class="treinador-topo">
+                @if (t.fotoUrl) {
+                  <p-avatar [image]="t.fotoUrl" shape="circle" size="xlarge" [ariaLabel]="t.nome" />
+                } @else {
+                  <p-avatar [label]="iniciais(t.nome)" shape="circle" size="xlarge" styleClass="avatar-iniciais" />
+                }
+                <div>
+                  <h3 class="treinador-nome">{{ t.nome }}</h3>
+                  <p class="treinador-cargo">{{ t.cargo }}</p>
+                </div>
+              </div>
+              <ul class="contatos">
+                <li>
+                  <a [href]="'mailto:' + t.email" class="contato"><i class="pi pi-envelope" aria-hidden="true"></i> {{ t.email }}</a>
+                </li>
+                <li>
+                  <a [href]="whatsapp(t.telefone)" target="_blank" rel="noopener" class="contato">
+                    <i class="pi pi-whatsapp" aria-hidden="true"></i> {{ t.telefone | mask: mascaraTelefone }}
+                  </a>
+                </li>
+              </ul>
+            </article>
+          }
+        }
+      </div>
+    </section>
+
+    <!-- Elenco -->
+    <section class="secao" aria-labelledby="titulo-elenco">
+      <h2 id="titulo-elenco" class="secao-titulo">
+        Elenco
+        <p-badge [value]="elenco().length" badgeSize="large" severity="contrast" [attr.aria-label]="elenco().length + ' atletas'" />
+      </h2>
+
+      <ul class="elenco">
+        @if (carregando()) {
+          @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+            <li><p-skeleton height="12rem" borderRadius="1.5rem" /></li>
+          }
+        } @else {
+          @for (a of elenco(); track a.id) {
+            <li class="jogador">
+              @if (a.fotoUrl) {
+                <p-avatar [image]="a.fotoUrl" shape="circle" size="xlarge" [ariaLabel]="a.nome" />
+              } @else {
+                <p-avatar [label]="iniciais(a.nome)" shape="circle" size="xlarge" styleClass="avatar-iniciais" />
+              }
+              <p class="camisa"><span class="sr-only">Camisa </span>#{{ a.numero }}</p>
+              <h3 class="jogador-nome">{{ a.nome }}</h3>
+              <p-tag [value]="rotuloPosicao(a.posicao)" severity="secondary" [rounded]="true" />
+            </li>
+          }
+        }
+      </ul>
+    </section>
+  }
+</section>

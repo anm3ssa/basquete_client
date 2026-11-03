@@ -1,0 +1,43 @@
+@reference '../../../../styles.css';
+
+:host {
+  @apply block;
+}
+
+/* O calendário ocupa toda a largura do cartão */
+:host ::ng-deep .calendario,
+:host ::ng-deep .calendario .p-datepicker-panel {
+  @apply w-full border-0;
+}
+
+.dia {
+  @apply relative flex size-full flex-col items-center justify-center;
+}
+
+.dia.tem-evento {
+  @apply font-bold;
+}
+
+.pontos {
+  @apply absolute bottom-0.5 flex gap-0.5;
+}
+
+.ponto {
+  @apply inline-block size-1.5 rounded-full;
+}
+
+.ponto.treino {
+  @apply bg-cinza-700;
+}
+
+.ponto.jogo {
+  @apply bg-laranja-500;
+}
+
+.legenda {
+  @apply mt-3 flex justify-center gap-5 text-sm text-cinza-700;
+}
+
+.legenda li {
+  @apply flex items-center gap-1.5;
+}

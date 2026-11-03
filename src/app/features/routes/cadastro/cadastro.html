@@ -1,0 +1,202 @@
+<main class="pagina">
+  <div class="grade">
+    <!-- Coluna do formulário -->
+    <section class="coluna-form">
+      <div class="conteudo">
+        <!-- Logo compacta no mobile (o painel lateral some em telas pequenas) -->
+        <img src="logo-basquete-assis.jpg" alt="Basquete Assis" class="logo-mobile" />
+
+        <header class="cabecalho">
+          <h1 class="titulo">Entre para o time!</h1>
+          <p class="subtitulo">Crie sua conta para acompanhar treinos e jogos.</p>
+        </header>
+
+        <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()" class="formulario" novalidate>
+          @if (errorMessage(); as mensagem) {
+            <p-message severity="error" size="small">{{ mensagem }}</p-message>
+          }
+          <div class="grupo">
+            <span id="rotulo-perfil" class="sr-only">Você é atleta ou treinador?</span>
+            <p-selectbutton
+              formControlName="perfil"
+              [options]="perfis"
+              optionLabel="rotulo"
+              optionValue="valor"
+              [allowEmpty]="false"
+              [fluid]="true"
+              [invalid]="invalido('perfil')"
+              ariaLabelledBy="rotulo-perfil"
+              class="seletor-perfil"
+              [class.invalido]="invalido('perfil')"
+            >
+              <ng-template #item let-opcao>
+                <i [class]="opcao.icone" aria-hidden="true"></i>
+                <span>{{ opcao.rotulo }}</span>
+              </ng-template>
+            </p-selectbutton>
+            @if (invalido('perfil')) {
+              <small class="erro-campo">Escolha se você é atleta ou treinador.</small>
+            }
+          </div>
+
+          <div class="grupo">
+            <label for="nome" class="sr-only">Nome completo</label>
+            <input
+              pInputText
+              id="nome"
+              formControlName="nome"
+              placeholder="nome completo"
+              autocomplete="name"
+              class="campo"
+              [class.invalido]="invalido('nome')"
+              [invalid]="invalido('nome')"
+              [attr.aria-invalid]="invalido('nome')"
+            />
+            @if (invalido('nome')) {
+              <small class="erro-campo">Informe seu nome.</small>
+            }
+          </div>
+
+          <div class="linha-dupla">
+            <div class="grupo">
+              <label for="cpf" class="sr-only">CPF</label>
+              <input
+                pInputText
+                id="cpf"
+                inputmode="numeric"
+                formControlName="cpf"
+                placeholder="CPF"
+                mask="000.000.000-00"
+                class="campo"
+                [class.invalido]="invalido('cpf')"
+                [invalid]="invalido('cpf')"
+                [attr.aria-invalid]="invalido('cpf')"
+              />
+              @if (invalido('cpf')) {
+                <small class="erro-campo">CPF inválido.</small>
+              }
+            </div>
+
+            <div class="grupo">
+              <label for="dataNascimento" class="sr-only">Data de nascimento</label>
+              <input
+                pInputText
+                id="dataNascimento"
+                inputmode="numeric"
+                formControlName="dataNascimento"
+                placeholder="nascimento (dd/mm/aaaa)"
+                autocomplete="bday"
+                mask="00/00/0000"
+                class="campo"
+                [class.invalido]="invalido('dataNascimento')"
+                [invalid]="invalido('dataNascimento')"
+                [attr.aria-invalid]="invalido('dataNascimento')"
+              />
+              @if (invalido('dataNascimento')) {
+                <small class="erro-campo">Data inválida.</small>
+              }
+            </div>
+          </div>
+
+          <div class="grupo">
+            <label for="email" class="sr-only">E-mail</label>
+            <input
+              pInputText
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="e-mail"
+              autocomplete="email"
+              class="campo"
+              [class.invalido]="invalido('email')"
+              [invalid]="invalido('email')"
+              [attr.aria-invalid]="invalido('email')"
+            />
+            @if (invalido('email')) {
+              <small class="erro-campo">Informe um e-mail válido.</small>
+            }
+          </div>
+
+          <div class="grupo">
+            <label for="telefone" class="sr-only">Telefone</label>
+            <input
+              pInputText
+              id="telefone"
+              type="tel"
+              inputmode="numeric"
+              formControlName="telefone"
+              placeholder="telefone"
+              autocomplete="tel-national"
+              mask="(00) 0000-0000||(00) 00000-0000"
+              class="campo"
+              [class.invalido]="invalido('telefone')"
+              [invalid]="invalido('telefone')"
+              [attr.aria-invalid]="invalido('telefone')"
+            />
+            @if (invalido('telefone')) {
+              <small class="erro-campo">Informe um telefone com DDD.</small>
+            }
+          </div>
+
+          <div class="grupo">
+            <label for="password" class="sr-only">Senha</label>
+            <p-password
+              inputId="password"
+              formControlName="password"
+              placeholder="senha"
+              autocomplete="new-password"
+              class="campo-senha"
+              [class.invalido]="invalido('password')"
+              [feedback]="false"
+              [toggleMask]="true"
+              [fluid]="true"
+              [invalid]="invalido('password')"
+            />
+            @if (invalido('password')) {
+              <small class="erro-campo">A senha precisa ter ao menos 6 caracteres.</small>
+            }
+          </div>
+
+          <div class="grupo">
+            <label for="confirmarPassword" class="sr-only">Confirmar senha</label>
+            <p-password
+              inputId="confirmarPassword"
+              formControlName="confirmarPassword"
+              placeholder="confirmar senha"
+              autocomplete="new-password"
+              class="campo-senha"
+              [class.invalido]="invalido('confirmarPassword')"
+              [feedback]="false"
+              [toggleMask]="true"
+              [fluid]="true"
+              [invalid]="invalido('confirmarPassword')"
+            />
+            @if (invalido('confirmarPassword')) {
+              <small class="erro-campo">As senhas não conferem.</small>
+            }
+          </div>
+
+          <div class="acoes">
+            <p-button
+              type="submit"
+              label="Cadastrar"
+              class="botao-principal"
+              [loading]="isLoading()"
+            />
+          </div>
+        </form>
+      </div>
+
+      <p class="rodape">
+        Já tem login? Entre
+        <a routerLink="/login" queryParamsHandling="preserve" class="link-secundario">aqui</a>
+      </p>
+    </section>
+
+    <!-- Painel da marca -->
+    <aside class="painel-marca" aria-hidden="true">
+      <img src="logo-basquete-assis.jpg" alt="" class="logo-painel" />
+      <p class="nome-painel">- Basquete Assis -</p>
+    </aside>
+  </div>
+</main>

@@ -1,0 +1,188 @@
+<section class="pagina">
+  <header class="cabecalho">
+    <div>
+      <h1 class="titulo">Desempenho</h1>
+      <p class="subtitulo">Lance o box score de cada jogo. O gráfico acompanha suas alterações antes de salvar.</p>
+    </div>
+    <div class="seletor">
+      <label for="jogo" class="rotulo">Jogo</label>
+      <p-select
+        inputId="jogo"
+        [options]="jogos()"
+        [ngModel]="jogoId()"
+        (ngModelChange)="trocarJogo($event)"
+        optionValue="id"
+        [loading]="carregandoJogos()"
+        placeholder="Escolha um jogo"
+        emptyMessage="Nenhum jogo realizado"
+        styleClass="campo-jogo"
+      >
+        <ng-template #selectedItem let-j>{{ rotuloJogo(j) }}</ng-template>
+        <ng-template #item let-j>
+          <div class="opcao-jogo">
+            <span class="opcao-adversario">{{ j.adversario }}</span>
+            <span class="opcao-data">{{ j.inicio | date: "dd/MM" }}, {{ rotuloMando(j).toLowerCase() }}</span>
+          </div>
+        </ng-template>
+      </p-select>
+    </div>
+  </header>
+
+  @if (jogo(); as j) {
+    <!-- Placar e situação da edição -->
+    <div class="resumo-jogo">
+      <div>
+        <p class="adversario">{{ j.adversario }} <span class="mando">{{ rotuloMando(j) }}</span></p>
+        <p class="quando">
+          <span><i class="pi pi-calendar" aria-hidden="true"></i> {{ j.inicio | date: "EEEE, dd/MM/yyyy" }}</span>
+          <span><i class="pi pi-map-marker" aria-hidden="true"></i> {{ j.local }}</span>
+        </p>
+      </div>
+      <div class="placar" aria-label="Pontos do Basquete Assis somados no box score">
+        <span class="placar-numero">{{ totais().pontos }}</span>
+        <span class="placar-rotulo">pontos no box score</span>
+      </div>
+      <div class="resumo-acoes">
+        @let s = situacao(j);
+        <p-tag [value]="s.rotulo" [severity]="s.severidade" [icon]="s.icone" />
+        <a class="btn-registro" [routerLink]="['/treinador/jogos', j.id, 'registro']">
+          <i class="pi pi-list-check" aria-hidden="true"></i> Registrar lance a lance
+        </a>
+      </div>
+    </div>
+
+    <!-- Gráfico em tempo real -->
+    <article class="cartao">
+      <div class="cartao-topo">
+        <h2 class="cartao-titulo">Por atleta</h2>
+        <p-selectbutton
+          [options]="modos"
+          [ngModel]="modo()"
+          (ngModelChange)="modo.set($event)"
+          optionLabel="rotulo"
+          optionValue="valor"
+          [allowEmpty]="false"
+          size="small"
+          ariaLabelledBy="rotulo-modo"
+        />
+        <span id="rotulo-modo" class="sr-only">Tipo de gráfico</span>
+      </div>
+      <div class="area-grafico">
+        @if (carregandoBox()) {
+          <p-skeleton height="100%" borderRadius="1rem" />
+        } @else {
+          <p-chart type="bar" [data]="dadosGrafico()" [options]="opcoesGrafico()" height="100%" ariaLabel="Gráfico de barras com os números de cada atleta no jogo" />
+        }
+      </div>
+    </article>
+
+    <!-- Box score editável -->
+    <article class="cartao sem-padding">
+      <div class="cartao-topo com-padding">
+        <h2 class="cartao-titulo">Box score</h2>
+        <div class="acoes">
+          @if (alterado()) {
+            <p-tag value="Alterações não salvas" severity="warn" icon="pi pi-pencil" />
+          } @else {
+            <p-tag value="Sem alterações pendentes" severity="secondary" icon="pi pi-check" />
+          }
+          <p-button label="Descartar" severity="secondary" [text]="true" [disabled]="!alterado() || salvando()" (onClick)="descartar()" />
+          <p-button
+            label="Salvar"
+            icon="pi pi-save"
+            [loading]="salvando()"
+            [disabled]="!alterado() || temErro()"
+            (onClick)="salvar()"
+          />
+        </div>
+      </div>
+
+      @if (temErro()) {
+        <p class="aviso"><i class="pi pi-exclamation-circle" aria-hidden="true"></i> Há arremessos convertidos maiores que os tentados (células em vermelho).</p>
+      }
+
+      <p-table
+        [value]="linhas.controls"
+        [loading]="carregandoBox()"
+        [scrollable]="true"
+        size="small"
+        [tableStyle]="{ 'min-width': '60rem' }"
+        styleClass="box"
+      >
+        <ng-template #header>
+          <tr>
+            <th rowspan="2" scope="col" class="fixa" pFrozenColumn>Atleta</th>
+            <th rowspan="2" scope="col" title="Minutos">MIN</th>
+            <th rowspan="2" scope="col" title="Pontos (calculado)">PTS</th>
+            <th colspan="2" scope="colgroup" class="grupo">Lance livre</th>
+            <th colspan="2" scope="colgroup" class="grupo">2 pontos</th>
+            <th colspan="2" scope="colgroup" class="grupo">3 pontos</th>
+            <th rowspan="2" scope="col" title="Rebotes">REB</th>
+            <th rowspan="2" scope="col" title="Assistências">AST</th>
+            <th rowspan="2" scope="col" title="Tocos">TOC</th>
+            <th rowspan="2" scope="col" title="Roubos de bola">ROB</th>
+          </tr>
+          <tr>
+            <th scope="col" title="Convertidos">C</th>
+            <th scope="col" title="Tentados">T</th>
+            <th scope="col" title="Convertidos">C</th>
+            <th scope="col" title="Tentados">T</th>
+            <th scope="col" title="Convertidos">C</th>
+            <th scope="col" title="Tentados">T</th>
+          </tr>
+        </ng-template>
+
+        <ng-template #body let-linha>
+          <tr [formGroup]="linha">
+            <td class="fixa" pFrozenColumn>
+              <span class="numero">#{{ linha.controls.numero.value }}</span>
+              {{ linha.controls.atletaNome.value }}
+            </td>
+            <td><p-inputnumber formControlName="minutos" [min]="0" [max]="60" styleClass="celula" [ariaLabel]="'Minutos de ' + linha.controls.atletaNome.value" /></td>
+            <td class="pts">{{ pontos(linha) }}</td>
+            @for (p of ['lanceLivre', 'doisPontos', 'tresPontos']; track p) {
+              <td [class.erro]="arremessoInvalido(linha, $any(p))">
+                <p-inputnumber [formControlName]="p + 'Convertidos'" [min]="0" [max]="99" styleClass="celula" [ariaLabel]="p + ' convertidos'" />
+              </td>
+              <td [class.erro]="arremessoInvalido(linha, $any(p))">
+                <p-inputnumber [formControlName]="p + 'Tentados'" [min]="0" [max]="99" styleClass="celula" [ariaLabel]="p + ' tentados'" />
+              </td>
+            }
+            <td><p-inputnumber formControlName="rebotes" [min]="0" [max]="99" styleClass="celula" ariaLabel="Rebotes" /></td>
+            <td><p-inputnumber formControlName="assistencias" [min]="0" [max]="99" styleClass="celula" ariaLabel="Assistências" /></td>
+            <td><p-inputnumber formControlName="tocos" [min]="0" [max]="99" styleClass="celula" ariaLabel="Tocos" /></td>
+            <td><p-inputnumber formControlName="roubos" [min]="0" [max]="99" styleClass="celula" ariaLabel="Roubos de bola" /></td>
+          </tr>
+        </ng-template>
+
+        <ng-template #footer>
+          <tr class="total">
+            <td class="fixa" pFrozenColumn>Equipe</td>
+            <td>{{ totais().minutos }}</td>
+            <td class="pts">{{ totais().pontos }}</td>
+            <td colspan="2">{{ totais().ft }} <span class="pct">{{ totais().ftPct === null ? '–' : (totais().ftPct | number: '1.1-1') }}%</span></td>
+            <td colspan="2">{{ totais().dois }} <span class="pct">{{ totais().doisPct === null ? '–' : (totais().doisPct | number: '1.1-1') }}%</span></td>
+            <td colspan="2">{{ totais().tres }} <span class="pct">{{ totais().tresPct === null ? '–' : (totais().tresPct | number: '1.1-1') }}%</span></td>
+            <td>{{ totais().rebotes }}</td>
+            <td>{{ totais().assistencias }}</td>
+            <td>{{ totais().tocos }}</td>
+            <td>{{ totais().roubos }}</td>
+          </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+          <tr>
+            <td colspan="13" class="vazio">Nenhum atleta relacionado neste jogo.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </article>
+  } @else if (!carregandoJogos()) {
+    <div class="vazio-pagina">
+      <i class="pi pi-chart-bar" aria-hidden="true"></i>
+      <p>Nenhum jogo realizado nos últimos meses. Os jogos aparecem aqui depois que acontecem.</p>
+    </div>
+  }
+</section>
+
+<p-confirmdialog />

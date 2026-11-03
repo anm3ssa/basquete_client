@@ -1,0 +1,49 @@
+<section class="pagina">
+  <header>
+    <h1 class="titulo">Calendário</h1>
+    <p class="subtitulo">Treinos e jogos do time. Toque em um evento para responder sua presença.</p>
+  </header>
+
+  <div class="grade">
+    <div class="cartao">
+      <app-calendario-mes [eventos]="eventos()" [(data)]="dataSelecionada" (mesAlterado)="carregarMes($event)" />
+    </div>
+
+    <div class="lista">
+      <h2 class="lista-titulo">
+        @if (mostrandoDia()) {
+          {{ dataSelecionada() | date: "EEEE, dd 'de' MMMM" }}
+        } @else {
+          Eventos do mês
+        }
+      </h2>
+
+      @if (carregando()) {
+        @for (i of [1, 2, 3]; track i) {
+          <p-skeleton height="5.5rem" borderRadius="1rem" />
+        }
+      } @else {
+        @for (e of lista(); track e.id) {
+          <app-evento-item [evento]="e" [mostrarPresenca]="true">
+            @if (podeResponder(e)) {
+              <p-button
+                [label]="e.minhaPresenca === 'PENDENTE' || !e.minhaPresenca ? 'Responder' : 'Alterar'"
+                icon="pi pi-user-edit"
+                size="small"
+                [outlined]="e.minhaPresenca !== 'PENDENTE'"
+                (onClick)="abrir(e)"
+              />
+            }
+          </app-evento-item>
+        } @empty {
+          <div class="vazio">
+            <i class="pi pi-calendar-times" aria-hidden="true"></i>
+            <p>Nenhum treino ou jogo neste mês.</p>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</section>
+
+<app-presenca [evento]="eventoAberto()" [(visivel)]="dialogVisivel" (respondido)="aoResponder($event)" />

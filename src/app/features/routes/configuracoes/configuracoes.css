@@ -1,0 +1,102 @@
+@reference '../../../../styles.css';
+
+.pagina {
+  @apply flex flex-col gap-6;
+}
+
+.titulo {
+  @apply font-display text-3xl font-extrabold text-cinza-950 sm:text-4xl;
+}
+
+.subtitulo {
+  @apply mt-1 text-cinza-700;
+}
+
+.grade {
+  @apply grid items-start gap-6 lg:grid-cols-[minmax(0,20rem)_1fr];
+}
+
+.cartao {
+  @apply flex flex-col gap-4 rounded-3xl border border-cinza-200 bg-white p-5 sm:p-6;
+}
+
+.cartao-titulo {
+  @apply font-display text-2xl font-extrabold text-cinza-950;
+}
+
+/*  Foto e identificação  */
+.perfil {
+  @apply items-center text-center;
+}
+
+.foto {
+  @apply rounded-full ring-4 ring-laranja-100;
+}
+
+:host ::ng-deep .avatar-grande {
+  @apply size-32 text-4xl;
+}
+
+:host ::ng-deep .avatar-grande img {
+  @apply size-32 object-cover;
+}
+
+:host ::ng-deep .avatar-iniciais {
+  @apply bg-laranja-500 font-bold text-white;
+}
+
+.nome {
+  @apply text-xl font-semibold text-cinza-950;
+}
+
+.acoes-foto {
+  @apply flex w-full flex-col gap-2;
+}
+
+.dica {
+  @apply text-xs text-cinza-600;
+}
+
+/*  Formulário  */
+.formulario {
+  @apply flex flex-col gap-4;
+}
+
+.linha {
+  @apply grid gap-4 sm:grid-cols-2;
+}
+
+.campo {
+  @apply flex flex-col gap-1.5;
+}
+
+.campo label,
+.rotulo {
+  @apply text-sm font-medium text-cinza-800;
+}
+
+.largo {
+  @apply w-full;
+}
+
+.erro {
+  @apply text-sm text-red-600;
+}
+
+.acoes {
+  @apply mt-2 flex flex-wrap justify-end gap-2;
+}
+
+/*  Excluir conta  */
+.coluna-lateral {
+  @apply flex flex-col gap-5.5;
+}
+
+.perigo {
+  @apply flex-col items-center gap-0;
+}
+
+.perigo .cartao-titulo {
+  @apply text-red-700;
+}
+

@@ -1,7 +1,13 @@
 import { Routes } from '@angular/router';
-import { authGuard, visitanteGuard } from './core/guards/auth-guard';
+import {
+  autenticadoGuard,
+  perfilGuard,
+  redirecionarParaInicio,
+  visitanteGuard,
+} from './core/guards/auth-guard';
 
 export const routes: Routes = [
+  // ---------- Públicas ----------
   {
     path: 'login',
     canActivate: [visitanteGuard],
@@ -9,121 +15,34 @@ export const routes: Routes = [
     title: 'Entrar · Basquete Assis',
   },
   {
-    // Tudo aqui dentro exige login e aparece com sidebar, header e footer
+    path: 'cadastro',
+    canActivate: [visitanteGuard],
+    loadComponent: () => import('./features/routes/cadastro/cadastro').then((m) => m.Cadastro),
+    title: 'Cadastro · Basquete Assis',
+  },
+
+  // ---------- Área logada (sidebar, header e footer) ----------
+  {
     path: '',
-    canActivate: [authGuard],
+    canMatch: [autenticadoGuard],
     loadComponent: () =>
       import('./features/layout/main-layout/main-layout').then((m) => m.MainLayout),
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./features/routes/dashboard/dashboard').then((m) => m.Dashboard),
-        title: 'Dashboard · Basquete Assis',
+        path: 'atleta',
+        canMatch: [perfilGuard('ROLE_ATLETA')],
+        loadChildren: () => import('./features/routes/atleta/atleta.routes'),
       },
       {
-        path: 'atletas',
-        title: 'Atletas · Basquete Assis',
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import('./features/routes/atletas/atleta-list/atleta-list').then(
-                (m) => m.AtletaList,
-              ),
-          },
-          {
-            path: 'novo',
-            loadComponent: () =>
-              import('./features/routes/atletas/atleta-form/atleta-form').then(
-                (m) => m.AtletaForm,
-              ),
-          },
-          {
-            path: ':id/editar',
-            loadComponent: () =>
-              import('./features/routes/atletas/atleta-form/atleta-form').then(
-                (m) => m.AtletaForm,
-              ),
-          },
-        ],
+        path: 'treinador',
+        canMatch: [perfilGuard('ROLE_TREINADOR')],
+        loadChildren: () => import('./features/routes/treinador/treinador.routes'),
       },
-      {
-        path: 'treinadores',
-        title: 'Treinadores · Basquete Assis',
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import(
-                './features/routes/treinadores/treinador-list/treinador-list'
-              ).then((m) => m.TreinadorList),
-          },
-          {
-            path: 'novo',
-            loadComponent: () =>
-              import('./features/routes/treinadores/treinador-form/treinador-form').then(
-                (m) => m.TreinadorForm,
-              ),
-          },
-          {
-            path: ':id/editar',
-            loadComponent: () =>
-              import('./features/routes/treinadores/treinador-form/treinador-form').then(
-                (m) => m.TreinadorForm,
-              ),
-          },
-        ],
-      },
-      {
-        path: 'treinos',
-        title: 'Treinos · Basquete Assis',
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import('./features/routes/treinos/treino-list/treino-list').then(
-                (m) => m.TreinoList,
-              ),
-          },
-          {
-            path: ':id',
-            loadComponent: () =>
-              import('./features/routes/treinos/treino-info/treino-info').then(
-                (m) => m.TreinoInfo,
-              ),
-          },
-        ],
-      },
-      {
-        path: 'agendamentos',
-        title: 'Agendamentos · Basquete Assis',
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import(
-                './features/routes/agendamentos/agendamento-list/agendamento-list'
-              ).then((m) => m.AgendamentoList),
-          },
-          {
-            path: 'novo',
-            loadComponent: () =>
-              import(
-                './features/routes/agendamentos/agendamento-form/agendamento-form'
-              ).then((m) => m.AgendamentoForm),
-          },
-          {
-            path: ':id/editar',
-            loadComponent: () =>
-              import(
-                './features/routes/agendamentos/agendamento-form/agendamento-form'
-              ).then((m) => m.AgendamentoForm),
-          },
-        ],
-      },
+      // "/" leva ao dashboard do perfil
+      { path: '', pathMatch: 'full', redirectTo: redirecionarParaInicio },
     ],
   },
-  { path: '**', redirectTo: 'login' },
+
+  // Qualquer outro endereço: dashboard do perfil, ou login se não houver sessão
+  { path: '**', redirectTo: redirecionarParaInicio },
 ];

@@ -1,0 +1,32 @@
+@let e = evento();
+<div class="item" [class.jogo]="e.tipo === 'JOGO'">
+  <div class="data" aria-hidden="true">
+    <span class="dia">{{ e.inicio | date: 'dd' }}</span>
+    <span class="mes">{{ e.inicio | date: 'MMM' }}</span>
+  </div>
+
+  <div class="info">
+    <div class="linha-titulo">
+      <p-tag
+        [value]="e.tipo === 'JOGO' ? 'Jogo' : 'Treino'"
+        [severity]="e.tipo === 'JOGO' ? 'warn' : 'secondary'"
+        [rounded]="true"
+      />
+      <span class="titulo">{{ titulo() }}</span>
+      @if (mando(); as m) {
+        <span class="mando">{{ m }}</span>
+      }
+    </div>
+    <p class="detalhes">
+      <span><i class="pi pi-clock" aria-hidden="true"></i> {{ e.inicio | date: "EEEE, dd/MM 'às' HH:mm" }}</span>
+      <span><i class="pi pi-map-marker" aria-hidden="true"></i> {{ e.local }}</span>
+    </p>
+    @if (mostrarPresenca() && presenca(); as p) {
+      <p-tag [value]="p.rotulo" [severity]="p.severidade" styleClass="presenca" />
+    }
+  </div>
+
+  <div class="acoes">
+    <ng-content />
+  </div>
+</div>

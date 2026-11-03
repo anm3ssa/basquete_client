@@ -1,0 +1,93 @@
+<section class="pagina">
+  <header class="cabecalho">
+    <div>
+      <h1 class="titulo">Calendário</h1>
+      <p class="subtitulo">Crie treinos e jogos, deixe anotações e convoque os atletas.</p>
+    </div>
+    <div class="acoes-topo">
+      <p-button label="Novo treino" icon="pi pi-plus" severity="secondary" [outlined]="true" (onClick)="novo('TREINO')" />
+      <p-button label="Novo jogo" icon="pi pi-plus" (onClick)="novo('JOGO')" />
+    </div>
+  </header>
+
+  <div class="grade">
+    <div class="cartao">
+      <app-calendario-mes [eventos]="eventos()" [(data)]="dataSelecionada" (mesAlterado)="carregarMes($event)" />
+    </div>
+
+    <div class="lista">
+      <h2 class="lista-titulo">
+        @if (mostrandoDia()) {
+          {{ dataSelecionada() | date: "EEEE, dd 'de' MMMM" }}
+        } @else {
+          Eventos do mês
+        }
+      </h2>
+
+      @if (carregando()) {
+        @for (i of [1, 2, 3]; track i) {
+          <p-skeleton height="5.5rem" borderRadius="1rem" />
+        }
+      } @else {
+        @for (e of lista(); track e.id) {
+          <app-evento-item [evento]="e">
+            @if (e.resumoPresenca; as r) {
+              <span class="contagem" [attr.aria-label]="r.confirmados + ' de ' + r.convocados + ' confirmados'">
+                <i class="pi pi-check" aria-hidden="true"></i> {{ r.confirmados }}/{{ r.convocados }}
+              </span>
+            }
+            @if (futuro(e)) {
+              <p-button
+                icon="pi pi-users"
+                severity="secondary"
+                [text]="true"
+                [rounded]="true"
+                pTooltip="Convocar e gerar ficha"
+                tooltipPosition="top"
+                ariaLabel="Convocar e gerar ficha"
+                (onClick)="convocar(e)"
+              />
+            }
+            <p-button
+              icon="pi pi-pencil"
+              severity="secondary"
+              [text]="true"
+              [rounded]="true"
+              pTooltip="Editar"
+              tooltipPosition="top"
+              ariaLabel="Editar"
+              (onClick)="editar(e)"
+            />
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [text]="true"
+              [rounded]="true"
+              pTooltip="Excluir"
+              tooltipPosition="top"
+              ariaLabel="Excluir"
+              (onClick)="excluir(e)"
+            />
+          </app-evento-item>
+        } @empty {
+          <div class="vazio">
+            <i class="pi pi-calendar-plus" aria-hidden="true"></i>
+            <p>Nenhum evento neste mês.</p>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</section>
+
+<app-evento-form
+  [evento]="eventoEditado()"
+  [tipoInicial]="tipoNovo()"
+  [dataSugerida]="dataSelecionada()"
+  [(visivel)]="formVisivel"
+  (salvo)="aoSalvar($event)"
+/>
+
+<app-convocacao-dialog [evento]="eventoConvocado()" [(visivel)]="convocacaoVisivel" (convocado)="aoConvocar()" />
+
+<p-confirmdialog />

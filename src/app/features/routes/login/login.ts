@@ -23,6 +23,8 @@ export class Login {
   private readonly route = inject(ActivatedRoute);
 
   protected readonly isLoading = signal(false);
+  /** Vindo da exclusão de conta (/login?conta=excluida) */
+  protected readonly contaExcluida = this.route.snapshot.queryParamMap.get('conta') === 'excluida';
   protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly loginForm = this.fb.group({
@@ -49,7 +51,8 @@ export class Login {
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: () => {
-          const destino = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/dashboard';
+          // Volta para onde a pessoa queria ir; senão, dashboard do perfil (atleta ou treinador)
+          const destino = this.route.snapshot.queryParamMap.get('returnUrl') ?? this.authService.rotaInicial();
           this.router.navigateByUrl(destino);
         },
         error: (err: HttpErrorResponse) => this.errorMessage.set(mensagemDeErro(err)),

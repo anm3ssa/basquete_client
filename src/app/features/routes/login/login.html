@@ -12,6 +12,9 @@
         </header>
 
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="formulario" novalidate>
+          @if (contaExcluida && !errorMessage()) {
+            <p-message severity="success" size="small">Sua conta foi excluída.</p-message>
+          }
           @if (errorMessage(); as mensagem) {
             <p-message severity="error" size="small">{{ mensagem }}</p-message>
           }
@@ -50,7 +53,7 @@
               [invalid]="invalido('password')"
             />
             @if (invalido('password')) {
-              <small class="erro-campo">Senha incorreta.</small>
+              <small class="erro-campo">A senha precisa ter ao menos 6 caracteres.</small>
             }
           </div>
 
@@ -62,14 +65,14 @@
 
       <p class="rodape">
         Não tem login? Faça
-        <a routerLink="/cadastro" class="link-cadastro">aqui</a>
+        <a routerLink="/cadastro" queryParamsHandling="preserve" class="link-cadastro">aqui</a>
       </p>
     </section>
 
     <!-- Painel da marca -->
     <aside class="painel-marca" aria-hidden="true">
       <img src="logo-basquete-assis.jpg" alt="" class="logo-painel" />
-      <p class="nome-painel">Basquete Assis</p>
+      <p class="nome-painel"> - Basquete Assis -</p>
     </aside>
   </div>
 </main>

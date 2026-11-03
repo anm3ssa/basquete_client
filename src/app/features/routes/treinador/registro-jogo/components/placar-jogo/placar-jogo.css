@@ -1,0 +1,70 @@
+@reference '../../../../../../../styles.css';
+
+.placar {
+  @apply flex flex-col gap-4 rounded-3xl bg-cinza-950 p-5 text-white sm:p-6;
+}
+
+.placar-topo {
+  @apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.titulo {
+  @apply font-display text-2xl font-extrabold sm:text-3xl;
+}
+
+.mando {
+  @apply rounded-full px-3 py-1 text-sm font-semibold;
+  background: rgb(255 255 255 / 0.15);
+}
+
+.placar-times {
+  @apply grid grid-cols-[1fr_auto_1fr] items-start gap-3;
+}
+
+.time {
+  @apply flex min-w-0 flex-col items-center gap-1 text-center;
+}
+
+.time-nome {
+  @apply text-sm font-semibold text-cinza-300 sm:text-base;
+}
+
+.time-pontos {
+  @apply font-display text-6xl leading-none font-extrabold text-laranja-400 sm:text-7xl;
+  font-variant-numeric: tabular-nums;
+}
+
+.adversario .time-pontos {
+  @apply text-white;
+}
+
+.placar-x {
+  @apply self-center font-display text-2xl text-cinza-500;
+}
+
+.botoes-adversario {
+  @apply mt-2 flex flex-wrap justify-center gap-1.5;
+}
+
+.btn-adv {
+  @apply min-w-10 cursor-pointer rounded-lg px-2.5 py-1.5 text-sm font-bold text-white disabled:cursor-not-allowed disabled:opacity-40;
+  background: rgb(255 255 255 / 0.1);
+}
+
+.btn-adv:not(:disabled):hover {
+  background: rgb(255 255 255 / 0.2);
+}
+
+.btn-adv:focus-visible {
+  outline: 2px solid var(--color-laranja-500);
+  outline-offset: 2px;
+}
+
+.quando {
+  @apply flex flex-col gap-1 text-sm text-cinza-300 sm:flex-row sm:justify-center sm:gap-4;
+}
+
+.quando span::first-letter {
+  @apply uppercase;
+}
+

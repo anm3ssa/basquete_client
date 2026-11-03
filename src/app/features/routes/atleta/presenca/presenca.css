@@ -1,0 +1,45 @@
+@reference '../../../../../styles.css';
+
+.resumo {
+  @apply mb-5 flex flex-col gap-1.5;
+}
+
+.quando {
+  @apply font-semibold text-cinza-950 first-letter:uppercase;
+}
+
+.onde {
+  @apply flex items-center gap-2 text-sm text-cinza-700;
+}
+
+.anotacoes {
+  @apply mt-3 rounded-xl bg-laranja-50 p-3 text-sm text-cinza-900;
+}
+
+.anotacoes-titulo {
+  @apply mb-1 block text-xs font-bold tracking-wide text-laranja-700 uppercase;
+}
+
+.opcoes {
+  @apply flex flex-col gap-2;
+}
+
+.ausencia {
+  @apply flex flex-col gap-1.5;
+}
+
+.rotulo {
+  @apply text-sm font-medium text-cinza-800;
+}
+
+.campo-texto {
+  @apply w-full;
+}
+
+.erro {
+  @apply text-sm text-red-600;
+}
+
+.alerta {
+  @apply mb-3;
+}

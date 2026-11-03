@@ -1,6 +1,6 @@
 @reference '../../../../styles.css';
 
-/* ---------- Estrutura ---------- */
+/* Estrutura  */
 .pagina {
   @apply min-h-dvh bg-white p-4 lg:p-6;
 }
@@ -17,7 +17,7 @@
   @apply flex w-full max-w-sm flex-1 flex-col justify-center;
 }
 
-/* ---------- Cabeçalho ---------- */
+/*  Cabeçalho */
 .logo-mobile {
   @apply mx-auto mb-6 size-28 rounded-3xl bg-black lg:hidden;
 }
@@ -34,7 +34,7 @@
   @apply mt-3 text-base text-cinza-700;
 }
 
-/* ---------- Formulário ---------- */
+/* Formulário */
 .formulario {
   @apply flex flex-col gap-4;
 }
@@ -77,7 +77,7 @@
   @apply px-5 text-sm text-red-600;
 }
 
-/* ---------- Botão ---------- */
+/*  Botão  */
 .acoes {
   @apply mt-4 flex justify-center;
 }
@@ -98,7 +98,7 @@
   @apply outline-2 outline-offset-2 outline-laranja-400;
 }
 
-/* ---------- Rodapé ---------- */
+/*  Rodapé  */
 .rodape {
   @apply pt-8 text-center text-cinza-800;
 }
@@ -107,7 +107,7 @@
   @apply font-bold text-laranja-600 underline underline-offset-4 hover:text-laranja-700;
 }
 
-/* ---------- Painel da marca ---------- */
+/*  Painel da marca  */
 .painel-marca {
   @apply relative hidden overflow-hidden rounded-[2.5rem] bg-black lg:flex lg:flex-col lg:items-center lg:justify-center;
 }
@@ -117,36 +117,32 @@
   content: '';
   position: absolute;
   inset: 0;
-  background:
+   background:
     radial-gradient(
-      circle at 50% 45%,
-      color-mix(in srgb, var(--color-laranja-500) 35%, transparent) 0%,
-      transparent 55%
-    ),
-    radial-gradient(
-      circle at 50% 110%,
+      circle at 50% 100%,
       color-mix(in srgb, var(--color-laranja-800) 60%, transparent) 0%,
       transparent 60%
     );
 }
 
-/* Linhas de quadra discretas */
-/* .painel-marca::after {
+/*/* Linhas */
+.painel-marca::after {
   content: '';
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 70%;
+  width: 80%;
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
   border: 2px solid color-mix(in srgb, var(--color-laranja-500) 18%, transparent);
   border-radius: 9999px;
-} */
+}
 
 .logo-painel {
   @apply relative z-10 w-3/5 max-w-sm;
+  /* A logo é um JPG com fundo preto: o blend esconde o quadrado sobre o painel escuro */
+  mix-blend-mode: lighten;
 }
-
 .nome-painel {
   @apply relative z-10 mt-6 font-display text-lg font-semibold tracking-[0.3em] text-cinza-300 uppercase;
 }

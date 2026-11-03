@@ -1,0 +1,18 @@
+<div class="cartao">
+  <div class="topo">
+    <span class="rotulo">{{ rotulo() }}</span>
+    @if (icone(); as i) {
+      <i [class]="i + ' icone'" aria-hidden="true"></i>
+    }
+  </div>
+  <p class="valor">
+    @if (valor() === null) {
+      –
+    } @else {
+      {{ valorFormatado() }}<span class="sufixo">{{ sufixo() }}</span>
+    }
+  </p>
+  @if (detalhe(); as d) {
+    <p class="detalhe">{{ d }}</p>
+  }
+</div>

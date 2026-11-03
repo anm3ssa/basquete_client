@@ -1,0 +1,33 @@
+@reference '../../../../../../../styles.css';
+
+.resumo {
+  @apply mb-4;
+}
+
+.evento {
+  @apply font-semibold text-cinza-950;
+}
+
+.quando {
+  @apply text-sm text-cinza-700 first-letter:uppercase;
+}
+
+.alerta {
+  @apply mb-3;
+}
+
+.rotulo {
+  @apply mb-1.5 block text-sm font-medium text-cinza-800;
+}
+
+.dica {
+  @apply mt-2 text-sm text-cinza-600;
+}
+
+:host ::ng-deep .ficha {
+  @apply mt-3;
+}
+
+.numero {
+  @apply font-display text-lg font-extrabold;
+}

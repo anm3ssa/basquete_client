@@ -1,0 +1,174 @@
+<section class="pagina">
+  <a routerLink="/treinador/desempenho" [queryParams]="{ jogo: id() }" class="voltar"><i class="pi pi-arrow-left" aria-hidden="true"></i> Desempenho</a>
+
+  @if (carregando()) {
+    <p-skeleton height="11rem" borderRadius="1.5rem" />
+    <div class="grade">
+      <p-skeleton height="18rem" borderRadius="1.5rem" />
+      <p-skeleton height="18rem" borderRadius="1.5rem" />
+    </div>
+  } @else if (erro() || !jogo()) {
+    <div class="vazio">
+      <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+      <p>Não foi possível abrir o registro deste jogo.</p>
+      <a routerLink="/treinador/desempenho" class="link">Voltar ao desempenho</a>
+    </div>
+  } @else if (jogo(); as j) {
+    <!-- Placar ao vivo -->
+    <app-placar-jogo
+      [jogo]="j"
+      [pontosTime]="placarTime()"
+      [pontosAdversario]="placarAdversario()"
+      (alterarAdversario)="pontosAdversario($event)"
+    />
+
+    <div class="periodo">
+      <span id="rotulo-periodo" class="rotulo">Período</span>
+      <p-selectbutton
+        [options]="periodos"
+        [ngModel]="periodo()"
+        (ngModelChange)="periodo.set($event)"
+        optionLabel="rotulo"
+        optionValue="valor"
+        [allowEmpty]="false"
+        ariaLabelledBy="rotulo-periodo"
+      />
+    </div>
+
+    @if (substituiNumeros()) {
+      <p-message severity="warn" icon="pi pi-exclamation-triangle">
+        Este jogo já tem números lançados em Desempenho. Ao salvar o registro, eles serão substituídos pelos lances marcados aqui.
+      </p-message>
+    }
+
+    <div class="grade">
+      <!-- 1. Atleta -->
+      <article class="cartao">
+        <h2 class="cartao-titulo"><span class="passo">1</span> Quem fez a jogada</h2>
+        <div class="atletas" role="group" aria-label="Atletas do jogo">
+          @for (a of atletas(); track a.atletaId) {
+            @let r = resumoPorAtleta()[a.atletaId];
+            <button
+              type="button"
+              class="atleta"
+              [class.ativo]="selecionado() === a.atletaId"
+              [attr.aria-pressed]="selecionado() === a.atletaId"
+              (click)="selecionar(a.atletaId)"
+            >
+              <span class="atleta-numero">{{ a.numero }}</span>
+              <span class="atleta-info">
+                <span class="atleta-nome">{{ a.atletaNome }}</span>
+                <span class="atleta-resumo">{{ r.pontos }} pts, {{ r.rebotes }} reb, {{ r.assistencias }} ast</span>
+              </span>
+            </button>
+          } @empty {
+            <p class="nada">Nenhum atleta ativo no elenco.</p>
+          }
+        </div>
+      </article>
+
+      <!-- 2. Lance -->
+      <article class="cartao">
+        <h2 class="cartao-titulo"><span class="passo">2</span> O que aconteceu</h2>
+        @if (atletaSelecionado(); as a) {
+          <p class="dica ativa">Marcando para <strong>#{{ a.numero }} {{ a.atletaNome }}</strong> no {{ rotuloPeriodo(periodo()) }}</p>
+        } @else {
+          <p class="dica">Nenhum atleta selecionado.</p>
+        }
+
+        <div class="arremessos">
+          @for (g of arremessos; track g.titulo) {
+            <div class="arremesso">
+              <span class="arremesso-titulo">{{ g.titulo }}</span>
+              <p-button
+                [label]="g.certo.rotulo"
+                [icon]="g.certo.icone"
+                [severity]="g.certo.severidade"
+                [disabled]="!selecionado()"
+                [ariaLabel]="g.titulo + ' convertido'"
+                styleClass="w-full"
+                (onClick)="marcar(g.certo.tipo)"
+              />
+              <p-button
+                [label]="g.errado.rotulo"
+                [icon]="g.errado.icone"
+                [severity]="g.errado.severidade"
+                [outlined]="true"
+                [disabled]="!selecionado()"
+                [ariaLabel]="g.titulo + ' errado'"
+                styleClass="w-full"
+                (onClick)="marcar(g.errado.tipo)"
+              />
+            </div>
+          }
+        </div>
+
+        <div class="outros">
+          @for (b of outros; track b.tipo) {
+            <p-button
+              [label]="b.rotulo"
+              severity="secondary"
+              [outlined]="true"
+              [disabled]="!selecionado()"
+              styleClass="w-full"
+              (onClick)="marcar(b.tipo)"
+            />
+          }
+        </div> 
+      </article>
+    </div>
+
+    <!-- Histórico -->
+    <article class="cartao">
+      <div class="cartao-topo">
+        <h2 class="cartao-titulo">Lances <span class="contador">{{ lances().length }}</span></h2>
+        <p-button
+          label="Desfazer último"
+          icon="pi pi-undo"
+          severity="secondary"
+          [text]="true"
+          [disabled]="!lances().length"
+          (onClick)="desfazer()"
+        />
+      </div>
+      <ol class="historico" aria-live="polite">
+        @for (l of historico(); track l.id) {
+          <li class="lance" [class.convertido]="l.convertido" [class.errado]="l.errado">
+            <span class="lance-periodo">{{ l.periodo === 5 ? 'Prorr.' : l.periodo + 'º Q' }}</span>
+            <span class="lance-atleta">{{ l.atleta }}</span>
+            <span class="lance-descricao">{{ l.descricao }}</span>
+            @if (l.pontos) {
+              <span class="lance-pontos">+{{ l.pontos }}</span>
+            }
+            <p-button
+              icon="pi pi-times"
+              severity="secondary"
+              [text]="true"
+              [rounded]="true"
+              size="small"
+              [ariaLabel]="'Remover lance: ' + l.descricao + ' de ' + l.atleta"
+              (onClick)="remover(l.id)"
+            />
+          </li>
+        } @empty {
+          <li class="nada">Nenhum lance marcado ainda.</li>
+        }
+      </ol>
+    </article>
+
+    <!-- Ações -->
+    <footer class="rodape">
+      @if (alterado()) {
+        <p-tag value="Rascunho guardado neste navegador" severity="warn" icon="pi pi-pencil" />
+      } @else {
+        <p-tag value="Tudo salvo" severity="success" icon="pi pi-check" />
+      }
+      <div class="rodape-botoes">
+        <p-button label="Descartar" severity="secondary" [text]="true" [disabled]="!alterado() || salvando()" (onClick)="descartar()" />
+        <p-button label="Salvar e ver desempenho" icon="pi pi-save" [loading]="salvando()" (onClick)="salvar()" />
+      </div>
+    </footer>
+  }
+</section>
+
+<p-confirmdialog />

@@ -1,8 +1,22 @@
 <div class="estrutura">
+  <!-- Desktop: sidebar fixa -->
   <app-sidebar class="lateral" />
 
+  <!-- Celular: a mesma sidebar dentro de um drawer -->
+  <p-drawer
+    [(visible)]="menuAberto"
+    position="left"
+    [showCloseIcon]="false"
+    styleClass="gaveta"
+    ariaCloseLabel="Fechar menu"
+  >
+    <ng-template #headless>
+      <app-sidebar (navegou)="menuAberto.set(false)" />
+    </ng-template>
+  </p-drawer>
+
   <div class="area">
-    <app-header />
+    <app-header (abrirMenu)="menuAberto.set(true)" />
 
     <main class="conteudo">
       <router-outlet />
@@ -11,3 +25,5 @@
     <app-footer />
   </div>
 </div>
+
+<p-toast position="top-right" />

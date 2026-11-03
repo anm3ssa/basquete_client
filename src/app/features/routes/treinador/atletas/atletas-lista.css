@@ -1,0 +1,73 @@
+@reference '../../../../../styles.css';
+
+.pagina {
+  @apply flex flex-col gap-6;
+}
+
+.cabecalho {
+  @apply flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between;
+}
+
+.titulo {
+  @apply font-display text-3xl font-extrabold text-cinza-950 sm:text-4xl;
+}
+
+.subtitulo {
+  @apply mt-1 text-cinza-700;
+}
+
+.cartao {
+  @apply overflow-hidden rounded-3xl border border-cinza-200 bg-white;
+}
+
+.barra {
+  @apply flex flex-col gap-3 md:flex-row md:items-center md:justify-between;
+}
+
+.busca {
+  @apply w-full md:w-80;
+}
+
+.col-numero {
+  @apply w-16 font-display text-lg font-extrabold text-cinza-950;
+}
+
+.col-acoes {
+  @apply w-28 text-right whitespace-nowrap;
+}
+
+.atleta {
+  @apply flex items-center gap-3;
+}
+
+:host ::ng-deep .avatar-iniciais {
+  @apply bg-laranja-500 font-bold text-white;
+}
+
+.atleta-info {
+  @apply flex flex-col;
+}
+
+.atleta-nome {
+  @apply font-semibold text-cinza-950;
+}
+
+.atleta-email {
+  @apply text-sm text-cinza-600;
+}
+
+.nascimento {
+  @apply block text-xs text-cinza-600;
+}
+
+.telefone {
+  @apply whitespace-nowrap tabular-nums;
+}
+
+tr.inativo td {
+  @apply text-cinza-500;
+}
+
+.vazio {
+  @apply py-8 text-center text-cinza-600;
+}

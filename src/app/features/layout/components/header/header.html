@@ -1,6 +1,30 @@
 <header class="topo">
-  <p class="saudacao">
-    <!-- Olá, <strong class="nome">{{ auth.usuario()?.nome ?? auth.usuario()?.sub }}</strong> -->
-  </p>
-  <!-- <p-button label="Sair" icon="pi pi-sign-out" severity="secondary" [text]="true" (onClick)="auth.logout()" /> -->
+  <p-button
+    icon="pi pi-bars"
+    severity="secondary"
+    [text]="true"
+    ariaLabel="Abrir menu"
+    styleClass="botao-menu"
+    (onClick)="abrirMenu.emit()"
+  />
+
+  <a [routerLink]="linkConfiguracoes()" class="usuario" title="Configurações da conta">
+    @if (foto(); as f) {
+      <p-avatar [image]="f" shape="circle" styleClass="avatar avatar-foto" />
+    } @else {
+      <p-avatar [label]="iniciais()" shape="circle" styleClass="avatar" />
+    }
+    <div class="identificacao">
+      <span class="nome">{{ auth.usuario()?.nome }}</span>
+      <span class="perfil">{{ perfil() }}</span>
+    </div>
+  </a>
+
+  <p-button
+    label="Sair"
+    icon="pi pi-sign-out"
+    severity="secondary"
+    [text]="true"
+    (onClick)="auth.logout()"
+  />
 </header>

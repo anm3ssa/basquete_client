@@ -1,0 +1,29 @@
+<p-datepicker
+  [(ngModel)]="data"
+  [inline]="true"
+  [showOtherMonths]="false"
+  (onMonthChange)="aoTrocarMes($event)"
+  styleClass="calendario"
+>
+  <ng-template #date let-dia>
+    @let tipos = marcacao(dia);
+    <span class="dia" [class.tem-evento]="!!tipos">
+      {{ dia.day }}
+      @if (tipos) {
+        <span class="pontos" aria-hidden="true">
+          @if (tipos.treino) {
+            <span class="ponto treino"></span>
+          }
+          @if (tipos.jogo) {
+            <span class="ponto jogo"></span>
+          }
+        </span>
+      }
+    </span>
+  </ng-template>
+</p-datepicker>
+
+<ul class="legenda">
+  <li><span class="ponto treino"></span> Treino</li>
+  <li><span class="ponto jogo"></span> Jogo</li>
+</ul>

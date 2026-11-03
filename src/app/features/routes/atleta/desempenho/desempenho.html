@@ -1,0 +1,61 @@
+<section class="pagina">
+  <header class="cabecalho">
+    <div>
+      <h1 class="titulo">Desempenho</h1>
+      <p class="subtitulo">Seus números jogo a jogo, lançados pela comissão técnica.</p>
+    </div>
+    <p-selectbutton
+      [options]="periodos"
+      [ngModel]="periodo()"
+      (ngModelChange)="periodo.set($event)"
+      optionLabel="rotulo"
+      optionValue="valor"
+      [allowEmpty]="false"
+      ariaLabelledBy="rotulo-periodo"
+    />
+    <span id="rotulo-periodo" class="sr-only">Período</span>
+  </header>
+
+  @if (carregando()) {
+    <div class="metricas">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <p-skeleton height="6.5rem" borderRadius="1rem" />
+      }
+    </div>
+    <p-skeleton height="20rem" borderRadius="1.5rem" />
+  } @else if (erro()) {
+    <div class="vazio">
+      <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+      <p>Não foi possível carregar suas estatísticas.</p>
+    </div>
+  } @else if (medias().jogos === 0) {
+    <div class="vazio">
+      <i class="pi pi-chart-line" aria-hidden="true"></i>
+      <p>Ainda não há jogos com estatísticas lançadas.</p>
+    </div>
+  } @else {
+    <div class="metricas">
+      <app-card-estatistica rotulo="Pontos" [valor]="medias().pontos" [detalhe]="'média em ' + medias().jogos + ' jogos'" />
+      <app-card-estatistica rotulo="Assistências" [valor]="medias().assistencias" detalhe="média por jogo" />
+      <app-card-estatistica rotulo="Rebotes" [valor]="medias().rebotes" detalhe="média por jogo" />
+      <app-card-estatistica rotulo="Tocos" [valor]="medias().tocos" detalhe="média por jogo" />
+      <app-card-estatistica rotulo="Lance livre" [valor]="medias().ft" sufixo="%" detalhe="aproveitamento (FT)" />
+      <app-card-estatistica rotulo="2 pontos" [valor]="medias().dois" sufixo="%" detalhe="aproveitamento (2PT)" />
+      <app-card-estatistica rotulo="3 pontos" [valor]="medias().tres" sufixo="%" detalhe="aproveitamento (3PT)" />
+    </div>
+
+    <article class="grafico">
+      <h2 class="grafico-titulo">Evolução por jogo</h2>
+      <div class="area-grafico">
+        <p-chart type="line" [data]="evolucao()" [options]="opcoesEvolucao" height="100%" ariaLabel="Gráfico de linhas: pontos, assistências, rebotes e tocos por jogo" />
+      </div>
+    </article>
+
+    <article class="grafico">
+      <h2 class="grafico-titulo">Aproveitamento de arremessos</h2>
+      <div class="area-grafico">
+        <p-chart type="bar" [data]="aproveitamento()" [options]="opcoesAproveitamento" height="100%" ariaLabel="Gráfico de barras: percentual de lance livre, 2 e 3 pontos por jogo" />
+      </div>
+    </article>
+  }
+</section>

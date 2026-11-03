@@ -1,0 +1,109 @@
+<section class="pagina">
+  <header>
+    <h1 class="titulo">Olá, {{ primeiroNome() }}!</h1>
+    <p class="subtitulo">Visão geral da equipe e das próximas duas semanas.</p>
+  </header>
+
+  @if (carregando()) {
+    <div class="indicadores">
+      @for (i of [1, 2, 3]; track i) {
+        <p-skeleton height="6.5rem" borderRadius="1rem" />
+      }
+    </div>
+    <p-skeleton height="16rem" borderRadius="1.5rem" />
+  } @else if (erro()) {
+    <div class="vazio">
+      <i class="pi pi-exclamation-circle" aria-hidden="true"></i>
+      <p>Não foi possível carregar o painel. Tente novamente mais tarde.</p>
+    </div>
+  } @else {
+    <div class="indicadores">
+      <app-card-estatistica rotulo="Atletas ativos" [valor]="ativos()" icone="pi pi-users" detalhe="no elenco" />
+      <app-card-estatistica
+        rotulo="Próximos 14 dias"
+        [valor]="agenda().length"
+        icone="pi pi-calendar"
+        [detalhe]="jogosNaAgenda() + ' jogo(s) e ' + (agenda().length - jogosNaAgenda()) + ' treino(s)'"
+      />
+      <app-card-estatistica
+        rotulo="Confirmação do próximo"
+        [valor]="proximo() ? resumo().taxa : null"
+        sufixo="%"
+        icone="pi pi-check-circle"
+        [detalhe]="proximo() ? resumo().confirmados + ' de ' + resumo().total + ' convocados' : 'sem evento marcado'"
+      />
+    </div>
+
+    <div class="grade">
+      <!-- Próximo evento + confirmações -->
+      <article class="cartao">
+        <div class="cartao-topo">
+          <h2 class="cartao-titulo">Próximo evento</h2>
+          <a routerLink="/treinador/calendario" class="link">Calendário <i class="pi pi-arrow-right" aria-hidden="true"></i></a>
+        </div>
+
+        @if (proximo(); as e) {
+          <app-evento-item [evento]="e" />
+
+          <div class="confirmacao">
+            <div class="confirmacao-topo">
+              <span>Taxa de confirmação</span>
+              <strong>{{ resumo().taxa }}%</strong>
+            </div>
+            <p-progressbar [value]="resumo().taxa" [showValue]="false" styleClass="barra" />
+            <ul class="legenda">
+              <li><span class="bolinha confirmado"></span> {{ resumo().confirmados }} confirmados</li>
+              <li><span class="bolinha ausente"></span> {{ resumo().ausentes }} ausentes</li>
+              <li><span class="bolinha pendente"></span> {{ resumo().pendentes }} sem resposta</li>
+            </ul>
+          </div>
+
+          @if (naoConfirmados().length) {
+            <h3 class="subtitulo-lista">Quem ainda não confirmou</h3>
+            <ul class="pessoas">
+              @for (p of naoConfirmados(); track p.atletaId) {
+                <li class="pessoa">
+                  <span class="pessoa-numero">#{{ p.numero }}</span>
+                  <div class="pessoa-info">
+                    <span class="pessoa-nome">{{ p.atletaNome }}</span>
+                    @if (p.justificativa) {
+                      <span class="pessoa-motivo">"{{ p.justificativa }}"</span>
+                    }
+                  </div>
+                  <p-tag
+                    [value]="p.status === 'AUSENTE' ? 'Ausente' : 'Sem resposta'"
+                    [severity]="p.status === 'AUSENTE' ? 'danger' : 'warn'"
+                  />
+                </li>
+              }
+            </ul>
+          }
+        } @else {
+          <div class="vazio">
+            <i class="pi pi-calendar-plus" aria-hidden="true"></i>
+            <p>Nenhum evento marcado.</p>
+            <a routerLink="/treinador/calendario" class="link">Criar treino ou jogo</a>
+          </div>
+        }
+      </article>
+
+      <!-- Agenda -->
+      <article class="cartao">
+        <h2 class="cartao-titulo">Agenda</h2>
+        <div class="agenda">
+          @for (e of agenda(); track e.id) {
+            <app-evento-item [evento]="e">
+              @if (e.resumoPresenca; as r) {
+                <span class="contagem" [attr.aria-label]="r.confirmados + ' de ' + r.convocados + ' confirmados'">
+                  <i class="pi pi-check" aria-hidden="true"></i> {{ r.confirmados }}/{{ r.convocados }}
+                </span>
+              }
+            </app-evento-item>
+          } @empty {
+            <p class="nada">Nada marcado para os próximos dias.</p>
+          }
+        </div>
+      </article>
+    </div>
+  }
+</section>
