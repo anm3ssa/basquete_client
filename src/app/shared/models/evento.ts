@@ -8,17 +8,17 @@ interface EventoBase {
   inicio: string;
   fim: string;
   local: string;
-  /** Anotações técnicas do treinador (visíveis ao atleta) */
+  /** anotações técnicas do treinador (visíveis ao atleta) */
   anotacoes?: string;
-  /** Presença do atleta logado. Só vem para ROLE_ATLETA. */
+  /** presença do atleta. ROLE_ATLETA. */
   minhaPresenca?: StatusPresenca;
-  /** Resumo da convocação. Só vem para ROLE_TREINADOR. */
+  /** resumo da convocação. ROLE_TREINADOR. */
   resumoPresenca?: ResumoPresenca;
 }
 
 export interface Treino extends EventoBase {
   tipo: 'TREINO';
-  /** Foco do treino, ex.: "Defesa por zona" */
+  /** foco do treino */
   foco?: string;
 }
 
@@ -32,7 +32,6 @@ export interface Jogo extends EventoBase {
 
 export type Evento = Treino | Jogo;
 
-/** Corpo de criação/edição (o id vem da URL na edição). */
 export type EventoPayload = Omit<Treino, 'id' | 'minhaPresenca' | 'resumoPresenca'> | Omit<Jogo, 'id' | 'minhaPresenca' | 'resumoPresenca'>;
 
 export interface ResumoPresenca {
@@ -52,18 +51,18 @@ export interface Presenca {
 
 export interface ConfirmacaoPresencaRequest {
   status: Exclude<StatusPresenca, 'PENDENTE'>;
-  /** Obrigatória quando status = AUSENTE */
+  /** obrigatória quando status = AUSENTE */
   justificativa?: string;
 }
 
-/** Ficha de participação gerada na convocação. */
+/** ficha de participação  */
 export interface Convocacao {
   eventoId: string;
   geradaEm: string;
   atletas: Pick<Presenca, 'atletaId' | 'atletaNome' | 'numero' | 'status'>[];
 }
 
-/** "Em casa" ou "Fora", para mostrar junto do nome do adversário */
+/** "em casa" ou "fora", mostra junto do nome do adversário */
 export function rotuloMando(jogo: Pick<Jogo, 'mandante'>): string {
   return jogo.mandante ? 'Em casa' : 'Fora';
 }

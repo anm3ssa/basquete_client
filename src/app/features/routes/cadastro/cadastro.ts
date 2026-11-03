@@ -48,7 +48,7 @@ export class Cadastro {
 
   protected readonly cadastroForm = this.fb.group(
     {
-      // Sem valor inicial: a pessoa precisa escolher. É o perfil que decide a tela após o login.
+      // a pessoa precisa escolher.
       perfil: this.fb.control<Role | null>(null, Validators.required),
       nome: ['', [Validators.required, Validators.minLength(3)]],
       cpf: ['', [Validators.required, cpfValido]],
@@ -79,16 +79,16 @@ export class Cadastro {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    // O ngx-mask entrega só os dígitos; a data vai para a API em ISO (yyyy-MM-dd)
+    // o ngx-mask entrega só os dígitos; a data vai para a API em ISO (yyyy-MM-dd)
     const { confirmarPassword: _, dataNascimento, perfil, ...dados } = this.cadastroForm.getRawValue();
 
     this.authService
       .cadastrar({ ...dados, perfil: perfil!, dataNascimento: dataBrParaIso(dataNascimento) ?? '' })
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
-        // Mesmo fluxo do login: token salvo, segue para onde a pessoa queria ir
+        // token salvo
         next: () => {
-          // Volta para onde a pessoa queria ir; senão, dashboard do perfil (atleta ou treinador)
+          // dashboard do perfil ou retorna 
           const destino = this.route.snapshot.queryParamMap.get('returnUrl') ?? this.authService.rotaInicial();
           this.router.navigateByUrl(destino);
         },

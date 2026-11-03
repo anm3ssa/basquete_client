@@ -36,7 +36,7 @@
   @apply flex items-center gap-1.5 text-sm font-semibold text-laranja-700 hover:underline;
 }
 
-/* ---------- Confirmação ---------- */
+/* confirmação */
 .confirmacao {
   @apply flex flex-col gap-2 rounded-2xl bg-cinza-50 p-4;
 }
@@ -61,19 +61,19 @@
   @apply flex items-center gap-1.5;
 }
 
-.bolinha {
+.icone {
   @apply inline-block size-2.5 rounded-full;
 }
 
-.bolinha.confirmado {
+.icone.confirmado {
   @apply bg-laranja-500;
 }
 
-.bolinha.ausente {
+.icone.ausente {
   @apply bg-red-500;
 }
 
-.bolinha.pendente {
+.icone.pendente {
   @apply bg-cinza-400;
 }
 
@@ -102,10 +102,10 @@
 }
 
 .pessoa-motivo {
-  @apply truncate text-sm text-cinza-600 italic;
+  @apply truncate text-sm text-cinza-600;
 }
 
-/* ---------- Agenda ---------- */
+/* agenda */
 .agenda {
   @apply flex flex-col gap-3;
 }

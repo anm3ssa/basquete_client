@@ -31,7 +31,7 @@ export class EventoItem {
     return e.adversario;
   });
 
-  /** "Em casa" / "Fora" (só jogos) */
+  /** "em casa" / "fora" */
   protected readonly mando = computed(() => {
     const e = this.evento();
     return e.tipo === 'JOGO' ? rotuloMando(e) : null;

@@ -1,6 +1,6 @@
 @reference '../../../../styles.css';
 
-/* ---------- Estrutura ---------- */
+/* estrutura */
 .pagina {
   @apply min-h-dvh bg-white p-4 lg:p-6;
 }
@@ -17,7 +17,7 @@
   @apply flex w-full max-w-sm flex-1 flex-col justify-center;
 }
 
-/* ---------- Cabeçalho ---------- */
+/* cabeçalho */
 .logo-mobile {
   @apply mx-auto mb-6 size-28 rounded-3xl bg-black lg:hidden;
 }
@@ -34,12 +34,12 @@
   @apply mt-3 text-base text-cinza-700;
 }
 
-/* ---------- Formulário ---------- */
+/* formulário */
 .formulario {
   @apply flex flex-col gap-4;
 }
 
-/* ---------- Perfil (atleta / treinador) ---------- */
+/* perfil (atleta / treinador) */
 .rotulo-perfil {
   @apply px-5 text-sm font-medium text-cinza-800;
 }
@@ -56,7 +56,7 @@
   @apply gap-2 bg-transparent shadow-none;
 }
 
-/* Opção escolhida bem visível: decide para qual área a pessoa vai */
+/* opção escolhida */
 .seletor-perfil ::ng-deep .p-togglebutton.p-togglebutton-checked {
   @apply border-laranja-500 bg-laranja-500 font-semibold text-white;
 }
@@ -112,7 +112,7 @@
   @apply px-5 text-sm text-red-600;
 }
 
-/* ---------- Botão ---------- */
+/* botão */
 .acoes {
   @apply mt-4 flex justify-center;
 }
@@ -133,7 +133,7 @@
   @apply outline-2 outline-offset-2 outline-laranja-400;
 }
 
-/* ---------- Rodapé ---------- */
+/* rodapé */
 .rodape {
   @apply pt-8 text-center text-cinza-800;
 }
@@ -142,12 +142,12 @@
   @apply font-bold text-laranja-600 underline underline-offset-4 hover:text-laranja-700;
 }
 
-/* ---------- Painel da marca ---------- */
+/* painel */
 .painel-marca {
   @apply relative hidden overflow-hidden rounded-[2.5rem] bg-black lg:flex lg:flex-col lg:items-center lg:justify-center;
 }
 
-/* Brilho laranja atrás da logo */
+/* brilho atrás da logo */
 .painel-marca::before {
   content: '';
   position: absolute;
@@ -160,7 +160,7 @@
     );
 }
 
-/*/* Linhas */
+/*/* círculo */
 .painel-marca::after {
   content: '';
   position: absolute;
@@ -175,7 +175,7 @@
 
 .logo-painel {
   @apply relative z-10 w-3/5 max-w-sm;
-  /* A logo é um JPG com fundo preto: o blend esconde o quadrado sobre o painel escuro */
+  /* esconte o fundo preto da logo */
   mix-blend-mode: lighten;
 }
 .nome-painel {

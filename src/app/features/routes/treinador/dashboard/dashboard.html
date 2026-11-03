@@ -26,19 +26,19 @@
         [detalhe]="jogosNaAgenda() + ' jogo(s) e ' + (agenda().length - jogosNaAgenda()) + ' treino(s)'"
       />
       <app-card-estatistica
-        rotulo="Confirmação do próximo"
+        rotulo="Confirmações do próximo jogo/treino"
         [valor]="proximo() ? resumo().taxa : null"
         sufixo="%"
         icone="pi pi-check-circle"
-        [detalhe]="proximo() ? resumo().confirmados + ' de ' + resumo().total + ' convocados' : 'sem evento marcado'"
+        [detalhe]="proximo() ? resumo().confirmados + ' de ' + resumo().total + ' convocados' : 'sem jogo/treino marcado'"
       />
     </div>
 
     <div class="grade">
-      <!-- Próximo evento + confirmações -->
+      <!-- próximo jogo/treino + confirmações -->
       <article class="cartao">
         <div class="cartao-topo">
-          <h2 class="cartao-titulo">Próximo evento</h2>
+          <h2 class="cartao-titulo">Próximo jogo/treino</h2>
           <a routerLink="/treinador/calendario" class="link">Calendário <i class="pi pi-arrow-right" aria-hidden="true"></i></a>
         </div>
 
@@ -52,14 +52,14 @@
             </div>
             <p-progressbar [value]="resumo().taxa" [showValue]="false" styleClass="barra" />
             <ul class="legenda">
-              <li><span class="bolinha confirmado"></span> {{ resumo().confirmados }} confirmados</li>
-              <li><span class="bolinha ausente"></span> {{ resumo().ausentes }} ausentes</li>
-              <li><span class="bolinha pendente"></span> {{ resumo().pendentes }} sem resposta</li>
+              <li><span class="icone confirmado"></span> {{ resumo().confirmados }} confirmados</li>
+              <li><span class="icone ausente"></span> {{ resumo().ausentes }} ausentes</li>
+              <li><span class="icone pendente"></span> {{ resumo().pendentes }} sem resposta</li>
             </ul>
           </div>
 
           @if (naoConfirmados().length) {
-            <h3 class="subtitulo-lista">Quem ainda não confirmou</h3>
+            <h3 class="subtitulo-lista">Ausentes e pendentes</h3>
             <ul class="pessoas">
               @for (p of naoConfirmados(); track p.atletaId) {
                 <li class="pessoa">
@@ -81,7 +81,7 @@
         } @else {
           <div class="vazio">
             <i class="pi pi-calendar-plus" aria-hidden="true"></i>
-            <p>Nenhum evento marcado.</p>
+            <p>Nenhum jogo/treino marcado.</p>
             <a routerLink="/treinador/calendario" class="link">Criar treino ou jogo</a>
           </div>
         }

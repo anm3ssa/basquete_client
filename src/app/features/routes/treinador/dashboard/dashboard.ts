@@ -37,7 +37,7 @@ export class TreinadorDashboard {
   protected readonly jogosNaAgenda = computed(() => this.agenda().filter((e) => e.tipo === 'JOGO').length);
   protected readonly primeiroNome = computed(() => this.auth.usuario()?.nome.split(' ')[0] ?? '');
 
-  /** Resumo do próximo evento a partir da lista de presenças */
+  /** resumo do próximo jogo/treino a partir da lista de presenças */
   protected readonly resumo = computed(() => {
     const lista = this.presencas();
     const conta = (s: Presenca['status']) => lista.filter((p) => p.status === s).length;
@@ -69,7 +69,7 @@ export class TreinadorDashboard {
       proximo: this.eventos.proximo(),
     })
       .pipe(
-        // Com o próximo evento em mãos, busca a lista de presenças dele
+        // com o próximo jogo/treino, busca a lista de presença
         switchMap((dados) =>
           (dados.proximo ? this.eventos.presencas(dados.proximo.id) : of([] as Presenca[])).pipe(
             map((presencas) => ({ ...dados, presencas })),
