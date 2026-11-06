@@ -118,12 +118,13 @@ import { computed, inject, Injectable, InjectionToken, signal } from '@angular/c
 import { Router } from '@angular/router';
 import { delay, finalize, map, Observable, of, shareReplay, switchMap, tap, throwError, timer } from 'rxjs';
 import { AuthResponse, CadastroRequest, JwtPayload, LoginRequest, Role, Usuario } from '../../shared/models';
+import { environment } from '../../../environments/environment';
 
-/** Endereço base da API. Ajuste para a URL do seu back-end. */
-export const API_URL = 'http://localhost:8080/api';
+/** Endereço base da API. */
+export const API_URL = environment.apiUrl;
 
 /** Rotas de autenticação: públicas, sem Bearer e sem refresh automático. */
-export const ROTAS_PUBLICAS = ['/auth/login', '/auth/cadastro', '/auth/refresh'];
+export const ROTAS_PUBLICAS = ['/auth/login', '/auth/register', '/auth/cadastro', '/auth/refresh'];
 
 /** Tela inicial de cada perfil depois do login. */
 export const ROTA_INICIAL: Record<Role, string> = {
@@ -135,11 +136,9 @@ const ACCESS_KEY = 'basquete-assis.access-token';
 const REFRESH_KEY = 'basquete-assis.refresh-token';
 
 /**
- * TEMPORÁRIO, enquanto não existe back-end: true faz o cadastro e o login funcionarem
- * só neste navegador (os cadastros ficam no localStorage). Quando a API estiver pronta,
- * mude para false: nada mais precisa ser alterado.
+ * Controlado via environments. Em desenvolvimento pode ficar true até integrar módulo por módulo.
  */
-export const SEM_BACKEND = true;
+export const SEM_BACKEND = environment.useMock;
 
 /** Permite ligar/desligar o modo sem back-end nos testes. */
 export const MODO_SEM_BACKEND = new InjectionToken<boolean>('MODO_SEM_BACKEND', {
@@ -201,7 +200,17 @@ export class AuthService {
   login(credenciais: LoginRequest): Observable<AuthResponse> {
     const resposta$ = this.semBackend
       ? loginLocal(credenciais)
-      : this.http.post<AuthResponse>(`${API_URL}/auth/login`, credenciais);
+      : this.http
+          .post<{ token: string }>(`${API_URL}/auth/login`, {
+            login: credenciais.email,
+            password: credenciais.password,
+          })
+          .pipe(
+            map((resposta) => ({
+              accessToken: resposta.token,
+              refreshToken: resposta.token,
+            })),
+          );
     return resposta$.pipe(tap((resposta) => this.salvarSessao(resposta)));
   }
 
@@ -209,7 +218,17 @@ export class AuthService {
   cadastrar(dados: CadastroRequest): Observable<AuthResponse> {
     const resposta$ = this.semBackend
       ? cadastroLocal(dados)
-      : this.http.post<AuthResponse>(`${API_URL}/auth/cadastro`, dados);
+      : this.http
+          .post<any>(`${API_URL}/auth/register`, {
+            email: dados.email,
+            password: dados.password,
+            role: dados.perfil,
+          })
+          .pipe(
+            switchMap(() =>
+              this.login({ email: dados.email, password: dados.password }),
+            ),
+          );
     return resposta$.pipe(tap((resposta) => this.salvarSessao(resposta)));
   }
 

@@ -16,6 +16,7 @@ import { HttpErrorResponse, HttpInterceptorFn, HttpRequest, HttpResponse } from 
 import { delay, from, Observable, of, switchMap, throwError } from 'rxjs';
 import { paraIsoDataHora } from '../../shared/datas';
 import { pontosDosLances } from '../../shared/registro';
+import { environment } from '../../../environments/environment';
 import {
   Atleta,
   AuthResponse,
@@ -35,7 +36,7 @@ import {
 } from '../../shared/models';
 import { API_URL, USUARIOS_LOCAIS_KEY, UsuarioLocal } from '../services/auth';
 
-export const USAR_MOCK_API = true;
+export const USAR_MOCK_API = environment.useMock;
 
 const CHAVE = 'basquete-assis.mock';
 const ATRASO_MS = 250;
