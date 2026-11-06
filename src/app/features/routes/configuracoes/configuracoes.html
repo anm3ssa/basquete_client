@@ -156,4 +156,40 @@
         </form>
       </article>
     </div>
+
+    <p-dialog
+      [(visible)]="dialogExcluir"
+      [modal]="true"
+      [draggable]="false"
+      [dismissableMask]="true"
+      header="Excluir conta"
+      [style]="{ width: '28rem' }"
+      [breakpoints]="{ '640px': '95vw' }"
+    >
+      <p class="texto-perigo">
+        Esta ação é permanente e remove o acesso à sua conta. Para confirmar, informe sua senha.
+      </p>
+      @if (erroExcluir(); as mensagem) {
+        <p-message severity="error" size="small">{{ mensagem }}</p-message>
+      }
+      <div class="campo">
+        <label for="senha-exclusao">Senha</label>
+        <p-password
+          id="senha-exclusao"
+          [formControl]="senhaExclusao"
+          [feedback]="false"
+          [toggleMask]="true"
+          autocomplete="current-password"
+          inputStyleClass="largo"
+          styleClass="largo"
+        />
+        @if (senhaExclusao.invalid && senhaExclusao.touched) {
+          <small class="erro">Informe sua senha.</small>
+        }
+      </div>
+      <ng-template #footer>
+        <p-button label="Cancelar" severity="secondary" [text]="true" (onClick)="dialogExcluir.set(false)" />
+        <p-button label="Excluir conta" icon="pi pi-trash" severity="danger" [loading]="excluindo()" (onClick)="excluirConta()" />
+      </ng-template>
+    </p-dialog>
   }

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, model, signal, viewChild } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
@@ -85,7 +85,7 @@ export class Configuracoes {
   protected readonly tiposAceitos = TIPOS_DE_FOTO.join(',');
 
   // ---------- Exclusão ----------
-  protected readonly dialogExcluir = signal(false);
+  protected readonly dialogExcluir = model(false);
   protected readonly excluindo = signal(false);
   protected readonly erroExcluir = signal<string | null>(null);
   protected readonly senhaExclusao = this.fb.control('', [Validators.required, Validators.minLength(6)]);

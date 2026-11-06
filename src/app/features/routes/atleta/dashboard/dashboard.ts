@@ -71,23 +71,26 @@ export class AtletaDashboard {
   /** Botão rápido: confirma sem abrir o dialog */
   protected confirmarRapido(): void {
     const e = this.proximo();
-    if (!e) return;
+    if (!e || !e.minhaPresenca) return;
     this.confirmando.set(true);
     this.eventos
       .responderPresenca(e.id, { status: 'CONFIRMADO' })
       .pipe(finalize(() => this.confirmando.set(false)))
       .subscribe({
         next: (atualizado) => this.aoResponder(atualizado),
-        error: () =>
+        error: (err: unknown) => {
+          const msg = (err as any)?.error?.message;
           this.mensagens.add({
             severity: 'error',
             summary: 'Não foi possível confirmar',
-            detail: 'Tente novamente em instantes.',
-          }),
+            detail: msg || 'Tente novamente em instantes.',
+          });
+        },
       });
   }
 
   protected abrirDialog(modo: ModoPresenca): void {
+    if (!this.proximo()?.minhaPresenca) return;
     this.dialogModo.set(modo);
     this.dialogVisivel.set(true);
   }

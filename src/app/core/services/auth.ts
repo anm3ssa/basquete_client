@@ -220,9 +220,14 @@ export class AuthService {
       ? cadastroLocal(dados)
       : this.http
           .post<any>(`${API_URL}/auth/register`, {
+            nome: dados.nome,
+            cpf: dados.cpf,
+            dataNascimento: dados.dataNascimento,
             email: dados.email,
+            telefone: dados.telefone,
             password: dados.password,
             role: dados.perfil,
+            perfil: dados.perfil,
           })
           .pipe(
             switchMap(() =>

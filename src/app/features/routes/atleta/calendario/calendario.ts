@@ -69,8 +69,8 @@ export class AtletaCalendario {
     });
   }
 
-  /** Só dá para responder eventos que ainda não aconteceram */
+  /** Só dá para responder eventos futuros em que o atleta foi convocado */
   protected podeResponder(evento: Evento): boolean {
-    return new Date(evento.inicio).getTime() > Date.now();
+    return !!evento.minhaPresenca && new Date(evento.inicio).getTime() > Date.now();
   }
 }

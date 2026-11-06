@@ -68,6 +68,10 @@ export class Presenca {
   private enviar(resposta: ConfirmacaoPresencaRequest): void {
     const evento = this.evento();
     if (!evento) return;
+    if (!evento.minhaPresenca) {
+      this.erro.set('Você só pode confirmar presença após ser convocado pelo treinador.');
+      return;
+    }
 
     this.enviando.set(true);
     this.erro.set(null);
@@ -79,12 +83,16 @@ export class Presenca {
           this.respondido.emit(atualizado);
           this.visivel.set(false);
         },
-        error: (e: HttpErrorResponse) =>
+        error: (e: HttpErrorResponse) => {
+          const msg = (e.error as any)?.message;
           this.erro.set(
-            e.status === 409
-              ? 'O prazo para responder este evento já terminou.'
-              : 'Não foi possível enviar sua resposta. Tente novamente.',
-          ),
+            e.status === 403
+              ? (msg || 'Você só pode confirmar presença após ser convocado pelo treinador.')
+              : e.status === 409
+                ? 'O prazo para responder este evento já terminou.'
+                : 'Não foi possível enviar sua resposta. Tente novamente.',
+          );
+        },
       });
   }
 }

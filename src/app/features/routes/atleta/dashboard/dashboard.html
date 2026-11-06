@@ -11,15 +11,19 @@
     <article class="destaque" [class.jogo]="e.tipo === 'JOGO'">
       <div class="destaque-topo">
         <span class="selo">Próximo {{ e.tipo === 'JOGO' ? 'jogo' : 'treino' }} · {{ quando() }}</span>
-        @switch (e.minhaPresenca) {
-          @case ('CONFIRMADO') {
-            <p-tag value="Presença confirmada" severity="success" icon="pi pi-check" />
-          }
-          @case ('AUSENTE') {
-            <p-tag value="Ausência justificada" severity="danger" icon="pi pi-times" />
-          }
-          @default {
-            <p-tag value="Aguardando sua resposta" severity="warn" icon="pi pi-clock" />
+        @if (!e.minhaPresenca) {
+          <p-tag value="Aguardando convocação" severity="secondary" icon="pi pi-clock" />
+        } @else {
+          @switch (e.minhaPresenca) {
+            @case ('CONFIRMADO') {
+              <p-tag value="Presença confirmada" severity="success" icon="pi pi-check" />
+            }
+            @case ('AUSENTE') {
+              <p-tag value="Ausência justificada" severity="danger" icon="pi pi-times" />
+            }
+            @default {
+              <p-tag value="Aguardando sua resposta" severity="warn" icon="pi pi-clock" />
+            }
           }
         }
       </div>
@@ -39,7 +43,9 @@
       </div>
 
       <div class="destaque-acoes">
-        @if (!e.minhaPresenca || e.minhaPresenca === 'PENDENTE') {
+        @if (!e.minhaPresenca) {
+          <span class="convocacao-pendente"><i class="pi pi-info-circle" aria-hidden="true"></i> Aguardando convocação do treinador</span>
+        } @else if (e.minhaPresenca === 'PENDENTE') {
           <p-button label="Confirmar presença" icon="pi pi-check" [loading]="confirmando()" (onClick)="confirmarRapido()" />
           <p-button
             label="Não vou"
